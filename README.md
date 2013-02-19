@@ -4,21 +4,21 @@
 TODO:
 Data Entry/Wrapping Program in Qt -
   UI:
-    List of Data sets (drop down menu)
-        List of Classifications of Data Sets (drop down menu)
-              Chose an algorithim to run on said data set
+    -List of Data sets (drop down menu)
+    -List of Classifications of Data Sets (drop down menu)
+    -Chose an algorithim to run on said data set
   
   Programing Structure:
-      Sanitize chosen data set (input into vector of DataPoint objects)
-      randomize order of data set
-      send data to learning algorithim
-        input to each learning algorithim:
-            Vector of the (randomized) DataPoint, the Index of the first non-training example,
-      recive data from learning algorithim 
-        output from learning algorithim:
-            Vector of SolvedDataPoint in the same order as the input. 
-      save results & Statistical Analysis to file
-      Display output Graphically nicely! (good luck)
+      -Sanitize chosen data set (input into vector of DataPoint objects)
+      -randomize order of data set
+      -send data to learning algorithim
+        -input to each learning algorithim:
+            -Vector of the (randomized) DataPoint, the Index of the first non-training example,
+      -recive data from learning algorithim 
+        -output from learning algorithim:
+          -Vector of SolvedDataPoint in the same order as the input. 
+      -save results & Statistical Analysis to file
+      -Display output Graphically nicely! (good luck)
   
   Chosen representation of Data Sets:
       Object DataPoint:
@@ -39,6 +39,7 @@ Data Entry/Wrapping Program in Qt -
         For example, iris. If we choose "look for iris-smoochy", set iris-smoochy to 1 in classification, all the rest to 0.
     Running this in Qt! Yaaay!
     Can you make a graph/some graphs out of this type of data?
+    Should we be sending the algorithim's final equation back as well?
     
 Kernelized Perceptron -
  http://cvit.iiit.ac.in/thesis/ranjeethMS2007/thesis/node21.html Has the algorithim! yaaay.
