@@ -81,6 +81,7 @@ vector<SolvedDataPoint> kPerceptronSolver(vector<DataPoint> input, int training,
 			input[i].calculatedClassification = true;
 		}
 	}
+	return output;
 }
 
 float qVectorDotProd(QVector<float> a, QVector<float> b)
