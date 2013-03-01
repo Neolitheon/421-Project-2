@@ -74,10 +74,10 @@ vector<SolvedDataPoint> kPerceptronSolver(vector<DataPoint> input, int training,
 		summation = 0;
 		for (int j = 0; j < training; j++) summation += solver[j]*qVectordotProd(input[j].attributes,input[i].attributes);
 		
-		if (yValues[i]*summation <= 0) //something got missclassfied (sign mismatch)
+		if (summation <= 0) //Summation lower than 0, so this is "false"
 		{
 			output[i].calculatedClassification = false;
-		} else {
+		} else { //set to true otherwise
 			output[i].calculatedClassification = true;
 		}
 	}
