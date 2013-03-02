@@ -17,6 +17,7 @@ public:
             attributes.push_back(attr[i]);
         }
     }
+    DataPoint(){}
 };
 
 class SolvedDataPoint
@@ -38,6 +39,8 @@ public:
         calculatedClassification = false;
         trainingExample = false;
     }
+    SolvedDataPoint(){}
+
 };
 
 #endif // STRUCTURES_H
