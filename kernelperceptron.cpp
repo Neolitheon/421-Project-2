@@ -101,8 +101,3 @@ QVector<SolvedDataPoint> kPerceptronSolver(QVector<DataPoint> input, int trainin
 	}
 	return output;
 }
-
-int main() {
-	return 0;
-}
-
