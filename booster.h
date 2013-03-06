@@ -4,6 +4,7 @@
 #include "structures.h"
 #include "boostdatapoint.h"
 #include "stump.h"
+#include <iostream>
 
 class Booster
 {
@@ -17,10 +18,11 @@ private:
     QVector< QVector<Stump> > stumps;
     QVector<Stump> classifier_set;
 
-    Booster(QVector<DataPoint>,int training_index, int iterations);
+    Booster(QVector<DataPoint>* data,int training_index, int iterations);
 
     void initialize();
     void sort_data();
+    void printClassifiers();
     QVector<BoostDataPoint*> sort_data_vector(QVector<BoostDataPoint*> subject, int n);
     void train();
     QVector <SolvedDataPoint> classify();

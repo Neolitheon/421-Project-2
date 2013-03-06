@@ -1,11 +1,15 @@
 #include "booster.h"
-#include <math.h>
+#include <cmath>
+#include <iostream>
+
+using namespace std;
 
 QVector<SolvedDataPoint> Booster::boost(QVector<DataPoint> data, int training_index, int iterations)
 {
-    Booster instance(data,training_index, iterations);
+    Booster instance(&data,training_index, iterations);
     instance.train();
     QVector<SolvedDataPoint> result = instance.classify();
+    instance.printClassifiers();
     instance.free_data();
     return result;
 }
@@ -17,20 +21,36 @@ void Booster::free_data()
     //delete(stumps);
 }
 
-Booster::Booster(QVector<DataPoint> data, int training_index, int iterations):t_i(training_index), n_i(iterations)
+Booster::Booster(QVector<DataPoint> *data, int training_index, int iterations):t_i(training_index), n_i(iterations)
 {
 
     //copy data pointers
-    for(int i = 0; i<data[0].attributes.size(); i++)
+    for(int i = 0; i<(*data).size(); i++)
     {
-        base_data.push_back(*(new BoostDataPoint(&data[i],(1.0f/((float)training_index)))));
+        base_data.push_back(*(new BoostDataPoint(&((*data)[i]),(1.0f/((float)training_index)))));
     }
     initialize();
+}
+
+void Booster::printClassifiers()
+{
+    cout<<"classifiers:"<<endl;
+    for(int i = 0; i < classifier_set.size(); i++)
+    {
+        cout<<"attribute "<<classifier_set[i].index<<" ";
+        if(classifier_set[i].direction)
+            cout<<"> "<<classifier_set[i].threshold;
+        else
+            cout<<"< "<<classifier_set[i].threshold;
+        cout<<"  ";
+    }
+    cout<<endl;
 }
 
 void Booster::initialize()
 {
     //set up classifier structure
+    cout<<"num attributes = "<<endl;
     for(int i = 0; i<base_data[0].data->attributes.size(); i++)
     {
         QVector<BoostDataPoint*> vec;
@@ -49,7 +69,7 @@ void Booster::initialize()
         vec.push_back(*(new Stump(i,data[i][0]->data->attributes[i]-0.00005)));
         for(int j = 1;j<data[i].size();j++)
         {
-            float x = data[i][j]->data->attributes[i]-data[i][j]->data->attributes[i-1];
+            float x = data[i][j]->data->attributes[i]-data[i][j-1]->data->attributes[i];
             if(abs(x)>0.0001)
             {
                 vec.push_back(*(new Stump(i,x/2.0)));
@@ -73,6 +93,7 @@ void Booster::train()
             best_stump = 0;
             for(int k = 0; k<stumps[j].size(); k++)
             {
+                //cout<<"attributes "<<data[0][0]->data->size()<<endl;
                 float e = stumps[j][k].test(data[i]);
                 if(e<tmp_err)
                 {
@@ -115,7 +136,8 @@ QVector<SolvedDataPoint> Booster::classify()
         bool verdict = true;
         for(int j = 0;j<classifier_set.size();j++)
         {
-            if(verdict = classifier_set[j].classify(base_data[i]) && !verdict)
+            verdict = classifier_set[j].classify(base_data[i]);
+            if(!verdict)
                break;
         }
         x.calculatedClassification = verdict;

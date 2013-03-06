@@ -12,6 +12,7 @@ float Stump::test(QVector<BoostDataPoint*> data)
     float w_p_gt,w_p_lt/*, w_n_gt, w_n_lt*/ = 0.0;
     for(int i = 0;i<data.size();i++)
     {
+
         if(data[i]->data->attributes[index]<threshold)
             w_p_lt+=data[i]->weight;
         else
