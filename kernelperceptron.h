@@ -9,12 +9,13 @@
  */
 
 #include "structures.h"
+
 class kernelPerceptron 
 {
-  
-	public: 
-		vector<SolvedDataPoint> kPerceptronSolver(vector<DataPoint> input, int training, int maxIter, int d);
 	
-	private:
-		float qVectorDotProd(QVector<float> a, QVector<float> b);
+public: 
+	QVector<SolvedDataPoint> kPerceptronSolver(QVector<DataPoint> input, int training, int maxIter, int d);
+	
+private:
+	float qVectorDotProd(QVector<float> a, QVector<float> b);
 };

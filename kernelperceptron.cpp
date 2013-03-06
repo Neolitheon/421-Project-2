@@ -10,7 +10,23 @@
 #include "kernelperceptron.h"
 #include "math.h"
 
-vector<SolvedDataPoint> kPerceptronSolver(vector<DataPoint> input, int training, int maxIter, int d) {
+float qVectorDotProd(QVector<float> a, QVector<float> b)
+{
+	float value = 0;
+	if( a.size() != b.size())
+	{
+		return 0;
+	} else {
+		for( int i = 0; i < a.size(); i++)
+		{
+			value += a.at(i)*b.at(i);
+		}
+	}
+	return value;
+	
+}
+
+QVector<SolvedDataPoint> kPerceptronSolver(QVector<DataPoint> input, int training, int maxIter, int d) {
 /*
  * repeat
  *	for(i <- 1 to training) 
@@ -40,7 +56,7 @@ vector<SolvedDataPoint> kPerceptronSolver(vector<DataPoint> input, int training,
 	for (int i = 0; i < training; i++)
 	{
 		solver[i]=0;
-		for (int j = 0; j < training; j++) kernelMatrix[i][j] = pow((1 + qVectordotProd(input[i].attributes,input[j].attributes)),d);
+		for (int j = 0; j < training; j++) kernelMatrix[i][j] = pow((1 + qVectorDotProd(input[i].attributes,input[j].attributes)),d);
 	}
 	
 	int j = 0;
@@ -67,35 +83,21 @@ vector<SolvedDataPoint> kPerceptronSolver(vector<DataPoint> input, int training,
 	 * solvedValue ~= <w,input[i]> = SUM (k= 0 to training) solver[k]*<input[k],input[i]>;
 	 *
 	 */
-	vector<SolvedDataPoint> output(input);
+	QVector<SolvedDataPoint> output;
+	
 	for( int i =0; i < input.size(); i++) 
 	{
+		output.push_back(input[i]);
 		if (i < training) output[i].trainingExample = true;
 		summation = 0;
-		for (int j = 0; j < training; j++) summation += solver[j]*qVectordotProd(input[j].attributes,input[i].attributes);
+		for (int j = 0; j < training; j++) summation += solver[j]*qVectorDotProd(input[j].attributes,input[i].attributes);
 		
-		if (summation <= 0) //Summation lower than 0, so this is "false"
+		if (summation <= 0) //sign is below 0, so set it to "0"
 		{
 			output[i].calculatedClassification = false;
-		} else { //set to true otherwise
+		} else { //else set it to "1"
 			output[i].calculatedClassification = true;
 		}
 	}
 	return output;
-}
-
-float qVectorDotProd(QVector<float> a, QVector<float> b)
-{
-	float value = 0;
-	if( a.size() != b.size())
-	{
-		return 0;
-	} else {
-		for( int i = 0; i < a.size(); i++)
-		{
-			value += a.at(i)*b.at(i);
-		}
-	}
-	return value;
-			
 }
