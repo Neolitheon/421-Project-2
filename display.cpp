@@ -166,12 +166,6 @@ QVector<DataPoint> Display::read_file(string file_name) {
                 line = in.readLine();
             }
             file.close();
-
-<<<<<<< HEAD
-    }
-=======
-    random_shuffle(points.begin(), points.end());
->>>>>>> 981099f56721169a0e8d0bd06637803d9791b5a5
     return points;
 }
 
