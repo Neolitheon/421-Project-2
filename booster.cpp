@@ -1,6 +1,7 @@
 #include "booster.h"
 #include <cmath>
 #include <iostream>
+#include <QtAlgorithms>
 
 using namespace std;
 
@@ -37,12 +38,8 @@ void Booster::printClassifiers()
     cout<<"classifiers:"<<endl;
     for(int i = 0; i < classifier_set.size(); i++)
     {
-        cout<<"attribute "<<classifier_set[i].index<<" ";
-        if(classifier_set[i].direction)
-            cout<<"> "<<classifier_set[i].threshold;
-        else
-            cout<<"< "<<classifier_set[i].threshold;
-        cout<<"  ";
+        cout<<"for attribute "<<classifier_set[i].index<<": ";
+        cout<<classifier_set[i].c_gt<<" if greater than "<<classifier_set[i].threshold<<", "<<classifier_set[i].c_lt<<" otherwise"<<endl;
     }
     cout<<endl;
 }
@@ -50,7 +47,7 @@ void Booster::printClassifiers()
 void Booster::initialize()
 {
     //set up classifier structure
-    cout<<"num attributes = "<<endl;
+    //cout<<"num attributes = "<<endl;
     for(int i = 0; i<base_data[0].data->attributes.size(); i++)
     {
         QVector<BoostDataPoint*> vec;
@@ -66,62 +63,83 @@ void Booster::initialize()
     for(int i = 0; i<data.size(); i++)
     {
         QVector< Stump > vec;
-        vec.push_back(*(new Stump(i,data[i][0]->data->attributes[i]-0.00005)));
+        Stump * stump = new Stump(i,data[i][0]->data->attributes[i]-0.00005);
+        vec.push_back(*(stump));
         for(int j = 1;j<data[i].size();j++)
         {
             float x = data[i][j]->data->attributes[i]-data[i][j-1]->data->attributes[i];
             if(abs(x)>0.0001)
             {
-                vec.push_back(*(new Stump(i,x/2.0)));
+                stump = new Stump(i,(x/2.0)+data[i][j-1]->data->attributes[i]);
+                vec.push_back(*(stump));
             }
         }
-        vec.push_back(*(new Stump(i,data[i][data[i].size()-1]->data->attributes[i]+0.00005)));
+        stump = new Stump(i,data[i][data[i].size()-1]->data->attributes[i]+0.00005);
+        vec.push_back(*(stump));
         stumps.push_back(vec);
     }
 }
 
 void Booster::train()
 {
-    float err = 1.0;
     for(int i = 0; i < n_i; i++)
-    {
-        float tmp_err = 1.0;
+    {  
+        float err = 0.5;
         int best_attr = 0;
         int best_stump = 0;
         for(int j = 0;j<stumps.size();j++)
         {
-            best_stump = 0;
+            float tmp_err = 0.5;
+            float best_stump_for_attribute = 0;
             for(int k = 0; k<stumps[j].size(); k++)
             {
                 //cout<<"attributes "<<data[0][0]->data->size()<<endl;
                 float e = stumps[j][k].test(data[i]);
-                if(e<tmp_err)
+                if(abs(0.5-e)>abs(0.5-tmp_err))
                 {
-                    best_stump = k;
+                    best_stump_for_attribute = k;
                     tmp_err = e;
+                    cout<<"new max err for attribute "<<j<<" is "<<tmp_err<<" on stump "<<best_stump<<" with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
                 }
             }
-            if(tmp_err<err)
+            if(abs(0.5-tmp_err)>abs(0.5-err))
             {
                 best_attr = j;
+                best_stump = best_stump_for_attribute;
                 err = tmp_err;
+                cout<<"new max err for iterration "<<best_attr<<" is "<<tmp_err<<" on stump "<<best_stump<<" with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
             }
         }
-        //TODO: adjust weights.
-        float alpha = log((1-err)/err)/2;
-        float z = 0.0;
-        for(int j = 0;j<base_data.size();j++)
-        {
-            base_data[j].weight *= exp(-alpha*stumps[best_attr][best_stump].classify(base_data[j]));
-            z += base_data[j].weight;
-        }
 
-        for(int j = 0;j<base_data.size();j++)
-        {
-            base_data[j].weight /= z;
-        }
+        cout<<"new classifier is at stump ["<<best_attr<<"]["<<best_stump<<"] with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
+        //TODO: adjust weights.
+        cout<<"error on iterration "<<i<<" = "<<err<<endl;
 
         classifier_set.push_back(stumps[best_attr][best_stump]);
+        if(abs(0.5-err)<0.02)
+        {
+            float alpha = log((1-err)/err)/2;
+            float z = 0.0;
+            for(int j = 0;j<base_data.size();j++)
+            {
+                //cout<<"base_data[j] = "<<base_data[j].data->attributes[best_attr]<<endl;
+                base_data[j].weight *= exp(-alpha*stumps[best_attr][best_stump].classify(base_data[j]));
+                z += base_data[j].weight;
+            }
+            cout<<"Z on iterration "<<i<<" = "<<z<<endl;
+            for(int j = 0;j<base_data.size();j++)
+            {
+                base_data[j].weight /= z;
+            }
+            //cout<<"stump on this iteration is"<<stumps[2][0].threshold<<endl;
+
+            cout<<"after itteration 1:"<<endl;
+            printClassifiers();
+            /*if(err<0.02)
+            {
+                break;
+            }*/
+        }
     }
 }
 
@@ -144,6 +162,11 @@ QVector<SolvedDataPoint> Booster::classify()
         vec.push_back(x);
     }
     return vec;
+}
+
+bool attributeLessThan(const BoostDataPoint *p1, const BoostDataPoint *p2)
+{
+    return p1->data->attributes[p1->attr_of_interest] < p2->data->attributes[p2->attr_of_interest];
 }
 
 void Booster::sort_data()
@@ -172,10 +195,37 @@ QVector<BoostDataPoint*> Booster::sort_data_vector(QVector<BoostDataPoint*> subj
         right = sort_data_vector(right, n);
 
         //return in order
-        if(left[0]->data->attributes[n]<right[0]->data->attributes[n])
-            return left + right;
-        else
-            return right +left;
+        //cout<<"left = "<<left[0]->data->attributes[n]<<" right = "<<right[0]->data->attributes[n]<<endl;
+
+        QVector<BoostDataPoint*> merged_result;
+        int l = 0;
+        int r = 0;
+        for(;l<left.size() && r<right.size();)
+        {
+            if(left[l]->data->attributes[n]<right[r]->data->attributes[n])
+            {
+                //cout<<"left smaller"<<endl;
+                merged_result.push_back(left[l++]);
+                //return left + right;
+            }
+            else
+            {
+                //cout<<"right smaller"<<endl;
+                merged_result.push_back(right[r++]);
+                //return right + left;
+            }
+        }
+
+        for(;l<left.size();l++)
+        {
+            merged_result.push_back(left[l]);
+        }
+        for(;r<right.size();r++)
+        {
+            merged_result.push_back(right[r]);
+        }
+
+        return merged_result;
     }
     else
     {

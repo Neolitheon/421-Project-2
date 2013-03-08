@@ -9,6 +9,8 @@ class Stump
     static const int GT = 1;
 public:
 
+    bool c_gt;
+    bool c_lt;
     int direction;
     float threshold;
     int index;

@@ -8,10 +8,13 @@ class BoostDataPoint
 public:
 
     float weight;
+    int attr_of_interest;
     DataPoint* data;
 
     BoostDataPoint(DataPoint* d, float w):data(d),weight(w){}
     BoostDataPoint(){}
+
+    void set_attr_of_iterest(int i){attr_of_interest = i;}
 };
 
 #endif // BOOSTDATAPOINT_H
