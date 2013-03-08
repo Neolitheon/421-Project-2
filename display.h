@@ -35,7 +35,7 @@ protected:
     void resizeGL(int width, int height);
     QVector< QVector<float> > analyse_accuracy();
     QVector<SolvedDataPoint> run_algorithim(QVector<DataPoint> points, int training_size, int max_it);
-    QVector<DataPoint> read_file();
+    QVector<DataPoint> read_file(string);
 
 private:
     QMatrix4x4  projectionMatrix;       /**< the projectionMatrix to describe our camera projection parameters.*/
