@@ -36,7 +36,7 @@ protected:
     QVector< QVector<float> > analyse_accuracy();
     QVector<SolvedDataPoint> run_algorithim(QVector<DataPoint> points, int training_size, int max_it);
     QVector<DataPoint> read_file();
-
+    QVector<DataPoint> randomize(QVector<DataPoint> points, int training_size);
 private:
     QMatrix4x4  projectionMatrix;       /**< the projectionMatrix to describe our camera projection parameters.*/
     QMatrix4x4  viewMatrix;             /**< the view matrix to describe the location and orientation of our camera. */

@@ -70,6 +70,7 @@ void Display::initializeGL()
     perceptron_degree = 2;
 }
 
+
 QVector< QVector<float> > Display::analyse_accuracy()
 {
     //read in file, take data points
@@ -84,7 +85,7 @@ QVector< QVector<float> > Display::analyse_accuracy()
             float trials_accuracy = 0;
             for (int trials=0; trials<100; trials++)
             {
-                random_shuffle(points.begin(), points.end());
+                points = randomize(points, training_size);
 
                 //run algorithim
                 QVector<SolvedDataPoint> data_points = run_algorithim(points,training_size, max_it);
@@ -157,8 +158,35 @@ QVector<DataPoint> Display::read_file() {
     }else if(switch_data_set == 3) { //blood data set
 
     }
-    random_shuffle(points.begin(), points.end());
     return points;
+}
+
+QVector<DataPoint> Display::randomize(QVector<DataPoint> points, int training_size)
+{
+    QVector<DataPoint> trues;
+    QVector<DataPoint> falses;
+    for(int i = 0; i < points.size(); i++) {
+        if (points[i].classification == true) {
+            trues.push_back(points[i]);
+        } else {
+            falses.push_back(points[i]);
+        }
+    }
+    float ratio = (float)trues.size()/(float)points.size();
+    int num_of_trues = ratio * training_size;
+    random_shuffle(trues.begin(), trues.end());
+    random_shuffle(falses.begin(), falses.end());
+    QVector<DataPoint> return_vector;
+    for(int i = 0; i < num_of_trues; i++) {
+        return_vector.push_back(trues[i]);
+    }
+    for(int i = 0; i < falses.size(); i++) {
+        return_vector.push_back(falses[i]);
+    }
+    for(int i = num_of_trues; i < trues.size(); i++) {
+        return_vector.push_back(trues[i]);
+    }
+    return return_vector;
 }
 
 QVector<SolvedDataPoint> Display::run_algorithim(QVector<DataPoint> points, int training_size, int max_it)
