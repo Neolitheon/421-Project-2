@@ -93,8 +93,13 @@ void Booster::train()
             float best_stump_for_attribute = 0;
             for(int k = 0; k<stumps[j].size(); k++)
             {
+<<<<<<< HEAD
                 //cout<<"attributes "<<data[0][0]->data->attributes->size()<<endl;
                 float e = stumps[j][k].test(data[j]);
+=======
+                //cout<<"attributes "<<data[0][0]->data->size()<<endl;
+                float e = stumps[j][k].test(data[i]);
+>>>>>>> 80f233be28800210c4751be4cedb19bae07c553a
                 if(abs(0.5-e)>abs(0.5-tmp_err))
                 {
                     best_stump_for_attribute = k;

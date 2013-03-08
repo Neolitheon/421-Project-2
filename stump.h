@@ -12,9 +12,14 @@ public:
     bool c_gt;
     bool c_lt;
     int direction;
+<<<<<<< HEAD
     int index;
     float threshold;
 
+=======
+    float threshold;
+    int index;
+>>>>>>> 80f233be28800210c4751be4cedb19bae07c553a
 
     Stump(int index, float threshold);
     Stump(){}
