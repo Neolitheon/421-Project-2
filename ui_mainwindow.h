@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri Mar 8 16:50:04 2013
+** Created: Sat Mar 9 00:12:05 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -18,10 +18,10 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
+#include <QtGui/QLCDNumber>
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
-#include <QtGui/QProgressBar>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QSlider>
@@ -66,11 +66,12 @@ public:
     QLabel *label_4;
     QLabel *label_5;
     QSlider *horizontalSlider_3;
+    QLCDNumber *lcdNumber_2;
+    QLCDNumber *lcdNumber_3;
+    QLCDNumber *lcdNumber;
     QFrame *frame_6;
     QVBoxLayout *verticalLayout;
     QPushButton *start;
-    QPushButton *reset;
-    QProgressBar *progressBar;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -110,6 +111,7 @@ public:
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         radioButton = new QRadioButton(frame_2);
         radioButton->setObjectName(QString::fromUtf8("radioButton"));
+        radioButton->setChecked(true);
 
         gridLayout_2->addWidget(radioButton, 1, 0, 1, 1);
 
@@ -151,6 +153,7 @@ public:
 
         radioButton_5 = new QRadioButton(frame_3);
         radioButton_5->setObjectName(QString::fromUtf8("radioButton_5"));
+        radioButton_5->setChecked(true);
 
         gridLayout_3->addWidget(radioButton_5, 1, 0, 1, 1);
 
@@ -217,17 +220,17 @@ public:
         label_3 = new QLabel(frame_5);
         label_3->setObjectName(QString::fromUtf8("label_3"));
 
-        gridLayout_5->addWidget(label_3, 0, 0, 1, 1);
+        gridLayout_5->addWidget(label_3, 0, 0, 1, 2);
 
         label_4 = new QLabel(frame_5);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
-        gridLayout_5->addWidget(label_4, 4, 0, 1, 1);
+        gridLayout_5->addWidget(label_4, 4, 0, 1, 2);
 
         label_5 = new QLabel(frame_5);
         label_5->setObjectName(QString::fromUtf8("label_5"));
 
-        gridLayout_5->addWidget(label_5, 2, 0, 1, 1);
+        gridLayout_5->addWidget(label_5, 2, 0, 1, 2);
 
         horizontalSlider_3 = new QSlider(frame_5);
         horizontalSlider_3->setObjectName(QString::fromUtf8("horizontalSlider_3"));
@@ -236,6 +239,24 @@ public:
         horizontalSlider_3->setOrientation(Qt::Horizontal);
 
         gridLayout_5->addWidget(horizontalSlider_3, 3, 0, 1, 1);
+
+        lcdNumber_2 = new QLCDNumber(frame_5);
+        lcdNumber_2->setObjectName(QString::fromUtf8("lcdNumber_2"));
+        lcdNumber_2->setProperty("value", QVariant(10));
+
+        gridLayout_5->addWidget(lcdNumber_2, 3, 1, 1, 1);
+
+        lcdNumber_3 = new QLCDNumber(frame_5);
+        lcdNumber_3->setObjectName(QString::fromUtf8("lcdNumber_3"));
+        lcdNumber_3->setProperty("value", QVariant(1));
+
+        gridLayout_5->addWidget(lcdNumber_3, 5, 1, 1, 1);
+
+        lcdNumber = new QLCDNumber(frame_5);
+        lcdNumber->setObjectName(QString::fromUtf8("lcdNumber"));
+        lcdNumber->setProperty("value", QVariant(1));
+
+        gridLayout_5->addWidget(lcdNumber, 1, 1, 1, 1);
 
 
         gridLayout->addWidget(frame_5, 5, 0, 1, 2);
@@ -252,17 +273,6 @@ public:
         start->setObjectName(QString::fromUtf8("start"));
 
         verticalLayout->addWidget(start);
-
-        reset = new QPushButton(frame_6);
-        reset->setObjectName(QString::fromUtf8("reset"));
-
-        verticalLayout->addWidget(reset);
-
-        progressBar = new QProgressBar(frame_6);
-        progressBar->setObjectName(QString::fromUtf8("progressBar"));
-        progressBar->setValue(0);
-
-        verticalLayout->addWidget(progressBar);
 
 
         gridLayout->addWidget(frame_6, 0, 0, 1, 2);
@@ -305,7 +315,6 @@ public:
         label_4->setText(QApplication::translate("MainWindow", "Perceptron Dimensions", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("MainWindow", "Training Set (%)", 0, QApplication::UnicodeUTF8));
         start->setText(QApplication::translate("MainWindow", "Start", 0, QApplication::UnicodeUTF8));
-        reset->setText(QApplication::translate("MainWindow", "Reset", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

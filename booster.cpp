@@ -5,6 +5,7 @@
 
 using namespace std;
 
+//Fails on 9 iteration
 QVector<SolvedDataPoint> Booster::boost(QVector<DataPoint> data, int training_index, int iterations)
 {
     Booster instance(&data,training_index, iterations);
@@ -35,19 +36,19 @@ Booster::Booster(QVector<DataPoint> *data, int training_index, int iterations):t
 
 void Booster::printClassifiers()
 {
-    cout<<"classifiers:"<<endl;
+    //cout<<"classifiers:"<<endl;
     for(int i = 0; i < classifier_set.size(); i++)
     {
-        cout<<"for attribute "<<classifier_set[i].index<<": ";
-        cout<<classifier_set[i].c_gt<<" if greater than "<<classifier_set[i].threshold<<", "<<classifier_set[i].c_lt<<" otherwise"<<endl;
+        //cout<<"for attribute "<<classifier_set[i].index<<": ";
+        //cout<<classifier_set[i].c_gt<<" if greater than "<<classifier_set[i].threshold<<", "<<classifier_set[i].c_lt<<" otherwise"<<endl;
     }
-    cout<<endl;
+    //cout<<endl;
 }
 
 void Booster::initialize()
 {
     //set up classifier structure
-    //cout<<"num attributes = "<<endl;
+    ////cout<<"num attributes = "<<endl;
     for(int i = 0; i<base_data[0].data->attributes.size(); i++)
     {
         QVector<BoostDataPoint*> vec;
@@ -93,28 +94,28 @@ void Booster::train()
             float best_stump_for_attribute = 0;
             for(int k = 0; k<stumps[j].size(); k++)
             {
-                //cout<<"attributes "<<data[0][0]->data->attributes->size()<<endl;
+                ////cout<<"attributes "<<data[0][0]->data->attributes->size()<<endl;
                 float e = stumps[j][k].test(data[j]);
 
-                if(abs(0.5-e)>abs(0.5-tmp_err))
+                if(e<tmp_err/*abs(0.5-e)>abs(0.5-tmp_err)*/)
                 {
                     best_stump_for_attribute = k;
                     tmp_err = e;
-                    cout<<"new max err for attribute "<<j<<" is "<<tmp_err<<" on stump "<<best_stump<<" with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
+                    //cout<<"new max err for attribute "<<j<<" is "<<tmp_err<<" on stump "<<best_stump_for_attribute<<" with threshold "<<stumps[j][best_stump_for_attribute].threshold<<endl;
                 }
             }
-            if(abs(0.5-tmp_err)>abs(0.5-err))
+            if(/*abs(0.5-tmp_err)>abs(0.5-err)*/tmp_err<err)
             {
                 best_attr = j;
                 best_stump = best_stump_for_attribute;
                 err = tmp_err;
-                cout<<"new max err for iterration "<<best_attr<<" is "<<tmp_err<<" on stump "<<best_stump<<" with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
+                //cout<<"new max err for iterration "<<best_attr<<" is "<<tmp_err<<" on stump "<<best_stump<<" with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
             }
         }
 
-        cout<<"new classifier is at stump ["<<best_attr<<"]["<<best_stump<<"] with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
+        //cout<<"new classifier is at stump ["<<best_attr<<"]["<<best_stump<<"] with threshold "<<stumps[best_attr][best_stump].threshold<<endl;
         //TODO: adjust weights.
-        cout<<"error on iterration "<<i<<" = "<<err<<endl;
+        //cout<<"error on iterration "<<i<<" = "<<err<<endl;
 
         classifier_set.push_back(stumps[best_attr][best_stump]);
         if(abs(0.5-err)<0.02)
@@ -123,18 +124,18 @@ void Booster::train()
             float z = 0.0;
             for(int j = 0;j<base_data.size();j++)
             {
-                //cout<<"base_data[j] = "<<base_data[j].data->attributes[best_attr]<<endl;
+                ////cout<<"base_data[j] = "<<base_data[j].data->attributes[best_attr]<<endl;
                 base_data[j].weight *= exp(-alpha*stumps[best_attr][best_stump].classify(base_data[j]));
                 z += base_data[j].weight;
             }
-            cout<<"Z on iterration "<<i<<" = "<<z<<endl;
+            //cout<<"Z on iterration "<<i<<" = "<<z<<endl;
             for(int j = 0;j<base_data.size();j++)
             {
                 base_data[j].weight /= z;
             }
-            //cout<<"stump on this iteration is"<<stumps[2][0].threshold<<endl;
+            ////cout<<"stump on this iteration is"<<stumps[2][0].threshold<<endl;
 
-            cout<<"after itteration 1:"<<endl;
+            //cout<<"after itteration 1:"<<endl;
             printClassifiers();
             /*if(err<0.02)
             {
@@ -196,7 +197,7 @@ QVector<BoostDataPoint*> Booster::sort_data_vector(QVector<BoostDataPoint*> subj
         right = sort_data_vector(right, n);
 
         //return in order
-        //cout<<"left = "<<left[0]->data->attributes[n]<<" right = "<<right[0]->data->attributes[n]<<endl;
+        ////cout<<"left = "<<left[0]->data->attributes[n]<<" right = "<<right[0]->data->attributes[n]<<endl;
 
         QVector<BoostDataPoint*> merged_result;
         int l = 0;
@@ -205,13 +206,13 @@ QVector<BoostDataPoint*> Booster::sort_data_vector(QVector<BoostDataPoint*> subj
         {
             if(left[l]->data->attributes[n]<right[r]->data->attributes[n])
             {
-                //cout<<"left smaller"<<endl;
+                ////cout<<"left smaller"<<endl;
                 merged_result.push_back(left[l++]);
                 //return left + right;
             }
             else
             {
-                //cout<<"right smaller"<<endl;
+                ////cout<<"right smaller"<<endl;
                 merged_result.push_back(right[r++]);
                 //return right + left;
             }

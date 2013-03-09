@@ -48,16 +48,19 @@ void MainWindow::on_start_clicked()
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
     ui->display->set_maximum_iterations(position);
+    ui->lcdNumber->setProperty("value", position);
 }
 
 void MainWindow::on_horizontalSlider_3_sliderMoved(int position)
 {
     ui->display->set_training_set_size(position);
+    ui->lcdNumber_2->setProperty("value", position);
 }
 
 void MainWindow::on_horizontalSlider_2_sliderMoved(int position)
 {
     ui->display->set_perceptron_degree(position);
+    ui->lcdNumber_3->setProperty("value", position);
 }
 
 void MainWindow::on_radioButton_9_clicked()
@@ -82,24 +85,35 @@ void MainWindow::on_radioButton_8_clicked()
 
 void MainWindow::on_radioButton_clicked()
 {
-    bool radio = ui->radioButton->isChecked();
     ui->display->set_data_set(0);
 }
 
 void MainWindow::on_radioButton_2_clicked()
 {
-    bool radio = ui->radioButton_2->isChecked();
     ui->display->set_data_set(1);
 }
 
 void MainWindow::on_radioButton_3_clicked()
 {
-    bool radio = ui->radioButton_3->isChecked();
     ui->display->set_data_set(2);
 }
 
 void MainWindow::on_radioButton_4_clicked()
 {
-    bool radio = ui->radioButton_4->isChecked();
     ui->display->set_data_set(3);
+}
+
+void MainWindow::on_radioButton_5_clicked()
+{
+    ui->display->set_algorithm(0);
+}
+
+void MainWindow::on_radioButton_6_clicked()
+{
+    ui->display->set_algorithm(1);
+}
+
+void MainWindow::on_radioButton_7_clicked()
+{
+    ui->display->set_algorithm(2);
 }

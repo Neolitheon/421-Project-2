@@ -35,6 +35,7 @@ public slots:
     void set_maximum_iterations(int n);
     void set_analysis(bool n);
     void set_data_set(int n);
+    void set_algorithm(int n);
 
 protected:
 
@@ -44,7 +45,7 @@ protected:
     QVector< QVector<float> > analyse_accuracy();
     QVector<SolvedDataPoint> run_algorithim(QVector<DataPoint> points, int training_size, int max_it);
     QVector<DataPoint> randomize(QVector<DataPoint> points, int training_size);
-    QVector<DataPoint> read_file(char* file_name);
+    QVector<DataPoint> read_file();
 private:
     QMatrix4x4  projectionMatrix;       /**< the projectionMatrix to describe our camera projection parameters.*/
     QMatrix4x4  viewMatrix;             /**< the view matrix to describe the location and orientation of our camera. */
