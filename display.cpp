@@ -40,18 +40,18 @@ Display::Display(QWidget *parent) :
 {
 }
 
-float Display::accuracy(QVector<SolvedDataPoint> points)
+float Display::accuracy(QVector<SolvedDataPoint> points, int training_size)
 {
-    int correct = points.size();
+    int correct = 0;
     for (int i=0; i<points.size(); i++)
     {
         //printf("%d%d", int(points[i].classification), int(points[i].calculatedClassification));
-        if (points[i].classification != points[i].calculatedClassification)
+        if (points[i].classification == points[i].calculatedClassification && points[i].trainingExample == false)
         {
-            correct -= 1;
+            correct += 1;
         }
     }
-    return correct;
+    return correct/float(points.size() - training_size);
 }
 
 void Display::initializeGL()
@@ -64,17 +64,85 @@ void Display::initializeGL()
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     srand(time(NULL));
-    switch_algorithim = 0;
+    switch_algorithim = 2;
     switch_data_set = 0;
-    switch_analysis = 0;
+    switch_analysis = 1;
     perceptron_degree = 2;
+    maximum_iterations = 10;
+    training_set_size = 0.25;
+    calc_finished = 0;
+    progress = 0;
 }
 
+void Display::start()
+{
+    QVector<DataPoint> points;
+    QVector<SolvedDataPoint> solved_points;
+    switch(switch_analysis)
+    {
+        case 0:
+            accuracy_points = analyse_accuracy();
+            calc_finished = 1;
+            break;
+        case 1:
+            points = read_file("thisdontmatter");
+            points = randomize(points, points.size()*training_set_size);
+            solved_points = run_algorithim(points, points.size()*training_set_size, maximum_iterations);
+            for (int i=0; i<solved_points.size(); i++)
+            {
+                solved_points[i].printString();
+            }
+            fflush(stdout);
+            break;
+    }
 
+
+}
+
+//returns progress
+int Display::return_progress()
+{
+   return progress;
+}
+
+void Display::set_maximum_iterations(int max_it)
+{
+    maximum_iterations = max_it;
+}
+
+void Display::set_perceptron_degree(int degree)
+{
+    perceptron_degree = degree;
+}
+
+void Display::set_training_set_size(int size)
+{
+    training_set_size = size/100.0;
+}
+
+void Display::set_analysis(bool onetime)
+{
+    if (onetime)
+    {
+        switch_analysis = 1;
+    }
+    else
+    {
+        switch_analysis = 0;
+    }
+
+}
+
+void Display::set_data_set(int n)
+{
+    switch_data_set = n;
+}
+
+//calls read file, calls randomize, calls run_algorithm buttload of times
 QVector< QVector<float> > Display::analyse_accuracy()
 {
     //read in file, take data points
-    QVector<DataPoint> points = read_file("/Users/naleliunas/Downloads/AI/iris.data");
+    QVector<DataPoint> points = read_file("/Users/naleliunas/Documents/421-Project-1/iris.data");
 
     QVector< QVector<float> > accuracy_points;
     for (int max_it=1; max_it<21; max_it++)
@@ -86,15 +154,16 @@ QVector< QVector<float> > Display::analyse_accuracy()
             for (int trials=0; trials<100; trials++)
             {
                 points = randomize(points, training_size);
+                //random_shuffle(points.begin(), points.end());
 
                 //run algorithim
                 QVector<SolvedDataPoint> data_points = run_algorithim(points,training_size, max_it);
-                trials_accuracy += accuracy(data_points);
-
+                trials_accuracy += accuracy(data_points, training_size);
+                printf("completed iteration [%i][%i][%i] with accuracy %f \n",max_it,training_size,trials,accuracy(data_points, training_size));
             }
            // printf("max_it:%d size:%d accuracy: %f\n", max_it, training_size, trials_accuracy/100);
             //printf("%d %d %f\n", max_it, training_size, trials_accuracy/100);
-            temp.push_back(trials_accuracy/(points.size() - training_size)/100);
+            temp.push_back(trials_accuracy/100.0);
         }
         accuracy_points.push_back(temp);
     }
@@ -102,73 +171,133 @@ QVector< QVector<float> > Display::analyse_accuracy()
     return accuracy_points;
 }
 
-QVector<DataPoint> Display::read_file(string file_name) {
+//reads file, returns QVector<DataPoints>
+QVector<DataPoint> Display::read_file(char* file_name) {
     QVector<DataPoint> points;
+
+    //THIS 4 MUST BE DYNAMICALLY DETEREMINED
+    int attr_size = 4;
+
+    QFile file("/Users/naleliunas/Documents/421-Project-1/iris.data");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream in(&file);
+    QString line = in.readLine();
     DataPoint new_point;
-    //if(switch_data_set == 0 || switch_data_set ==1 || switch_data_set ==2) { //set 0,1,2 to the three irises
-            //int attr_size = 4;
+    while (!line.isEmpty())
+    {
 
-            QFile file();
-            file.open(QIODevice::ReadOnly | QIODevice::Text);
-            QTextStream in(&file);
-            QString line = in.readLine();
-            while (!line.isNull())
+        const char *cstring = line.toUtf8().constData();
+
+        splitstring s(cstring);
+        vector<string> flds = s.split(',');
+        //float attr[attr_size];
+        QVector<float> attr;
+
+        char *a;
+        for (int k=0; k < flds.size(); k++){
+            a=new char[flds[k].size()+1];
+            a[flds[k].size()]=0;
+            memcpy(a,flds[k].c_str(),flds[k].size());
+            printf("%s ", a);
+
+            if (k < attr_size)
             {
-
-                const char *cstring = line.toUtf8().constData();
-
-                splitstring s(cstring);
-                vector<string> flds = s.split(',');
-                float attr[attr_size];
-
-                char *a;
-                int k=0;
-                for (; k < flds.size()-1; k++){
-                    a=new char[flds[k].size()+1];
-                    a[flds[k].size()]=0;
-                    memcpy(a,flds[k].c_str(),flds[k].size());
-                    //printf("%s ", a);
-
-                    if (k < attr_size)
-                    {
-                        attr.push_back(atof(a));
-                        //printf("%f ", attr[k]);
-                    }
-
-                }
-
-                if(switch_data_set == 0 || switch_data_set ==1 || switch_data_set ==2) { //set 0,1,2 to the three irises
-                    a=new char[flds[k].size()+1];
-                    a[flds[k].size()]=0;
-                    memcpy(a,flds[k].c_str(),flds[k].size());
-
-                    bool classification = false;
-                    char *true_classification;
-                    if(switch_data_set == 0) {
-                        true_classification = "Iris-setosa";
-                    } else if(switch_data_set == 1) {
-                        true_classification = "Iris-versicolor";
-                    } else if(switch_data_set == 2) {
-                        true_classification = "Iris-virginica";
-                    }
-                    if (strcmp(a, true_classification) == 0)
-                    {
-                        classification = true;
-                    }
-                }else if(switch_data_set == 3) { //blood data set
-
-                }
-
-                new_point = DataPoint(attr, attr_size, classification);
-                points.push_back(new_point);
-                //printf("\n");
-
-                line = in.readLine();
+                //attr[k] = atof(a);
+                //printf("%f ", attr[k]);
+                attr.push_back(atof(a));
             }
-            file.close();
+
+        }
+        bool classification = false;
+        char *true_classification;
+        if(switch_data_set == 0 || switch_data_set ==1 || switch_data_set ==2) { //set 0,1,2 to the three irises
+            if(switch_data_set == 0) {
+                true_classification = "Iris-setosa";
+            } else if(switch_data_set == 1) {
+                true_classification = "Iris-versicolor";
+            } else if(switch_data_set == 2) {
+                true_classification = "Iris-virginica";
+            }
+            if (strcmp(a, true_classification) == 0)
+            {
+                classification = true;
+            }
+        } else if(switch_data_set == 3) { //blood data set
+        }
+        //printf(":%d:\n", attr.size());
+        new_point = DataPoint(attr, attr_size, classification);
+        points.push_back(new_point);
+        printf("\n");
+
+        line = in.readLine();
+    }
+    file.close();
+    //randomize vector
+
+
     return points;
+    /*DataPoint new_point;
+    //if(switch_data_set == 0 || switch_data_set ==1 || switch_data_set ==2) { //set 0,1,2 to the three irises
+    int attr_size = 4;
+
+    QFile file(file_name);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream in(&file);
+    QString line = in.readLine();
+    while (!line.isNull())
+    {
+
+        const char *cstring = line.toUtf8().constData();
+
+        splitstring s(cstring);
+        vector<string> flds = s.split(',');
+        QVector<float> attr;
+
+        char *a;
+        int k=0;
+        for (; k < flds.size()-1; k++){
+            a=new char[flds[k].size()+1];
+            a[flds[k].size()]=0;
+            memcpy(a,flds[k].c_str(),flds[k].size());
+            //printf("%s ", a);
+
+            if (k < (flds.size()-1))
+            {
+                attr.push_back(atof(a));
+                //printf("%f ", attr[k]);
+            }
+
+        }
+        if(switch_data_set == 0 || switch_data_set ==1 || switch_data_set ==2) { //set 0,1,2 to the three irises
+
+            bool classification = false;
+            char *true_classification;
+            if(switch_data_set == 0) {
+                true_classification = "Iris-setosa";
+            } else if(switch_data_set == 1) {
+                true_classification = "Iris-versicolor";
+            } else if(switch_data_set == 2) {
+                true_classification = "Iris-virginica";
+            }
+            if (strcmp(a, true_classification) == 0)
+            {
+                classification = true;
+            }
+
+            new_point = DataPoint(attr, attr_size, classification);
+            points.push_back(new_point);
+        } else if(switch_data_set == 3) { //blood data set
+
+        }
+        //printf("\n");
+
+        line = in.readLine();
+    }
+    file.close();
+    return points;*/
 }
 
+//takes vector and training size, returns distributed randomized vector
 QVector<DataPoint> Display::randomize(QVector<DataPoint> points, int training_size)
 {
     QVector<DataPoint> trues;
@@ -197,10 +326,12 @@ QVector<DataPoint> Display::randomize(QVector<DataPoint> points, int training_si
     return return_vector;
 }
 
+//calls kperceptron/boost with QVector<DataPoints> and returns QVector<SolvedDataPoints> from respective functions
 QVector<SolvedDataPoint> Display::run_algorithim(QVector<DataPoint> points, int training_size, int max_it)
 {
 
     QVector<SolvedDataPoint> data_points;
+
     switch(switch_algorithim)
     {
         case 0:
@@ -233,22 +364,24 @@ void Display::paintGL()
     glVertex3f(0, 0.0f, -1.27);
     glEnd();
 
-    QVector< QVector<float> > accuracy_points = analyse_accuracy();
+    if (calc_finished == 0)
+        return;
+
     //THESE VALUES NEED TO BE DYNAMICALLY CALCULATED FROM 1.27 / 2 / MAXIT-1 AND POINTS.SIZE()/4-1
     float xsize = 0.0669;
     float zsize = 0.0363;
-    float red;
     float blue;
+    float green;
     for (int i=0; i<20; i++)
     {
         for (int j=0; j<36; j++)
         {
             float x = i/19.0*-1.27;
             float z = j/35.0*-1.27;
-            //red = accuracy_points[i][j];
-            red = 1;
-            blue = 1 - red;
-            glColor4f(red,0,blue, 1);
+            green = accuracy_points[i][j];
+            //red =1;
+            blue = 1 - green;
+            glColor3f(0,green,blue);
             glBegin(GL_QUADS);
             glVertex3f(x, 0.0f, z);
             glVertex3f(x-xsize, 0.0f, z);

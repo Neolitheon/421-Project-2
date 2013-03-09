@@ -11,7 +11,7 @@ public:
     bool classification;
     QVector<float> attributes;
 
-    DataPoint(float attr[], int n, bool c)
+    DataPoint(QVector<float> attr, int n, bool c)
     {
         classification = c;
         for(int i =0;i<n;i++)

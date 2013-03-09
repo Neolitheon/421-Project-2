@@ -30,10 +30,76 @@ void MainWindow::drawOpenGL()
 
 void MainWindow::calcOpenGL()
 {
-
+//    int progress = ui->display->return_progress();
+//    printf("%d\n", progress);
+//    ui->progressBar->setValue(progress);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_start_clicked()
+{
+    ui->display->start();
+}
+
+void MainWindow::on_horizontalSlider_sliderMoved(int position)
+{
+    ui->display->set_maximum_iterations(position);
+}
+
+void MainWindow::on_horizontalSlider_3_sliderMoved(int position)
+{
+    ui->display->set_training_set_size(position);
+}
+
+void MainWindow::on_horizontalSlider_2_sliderMoved(int position)
+{
+    ui->display->set_perceptron_degree(position);
+}
+
+void MainWindow::on_radioButton_9_clicked()
+{
+    bool radio9 = ui->radioButton_9->isChecked();
+    if (radio9)
+        ui->frame_5->setEnabled(true);
+    else
+        ui->frame_5->setEnabled(false);
+    ui->display->set_analysis(radio9);
+}
+
+void MainWindow::on_radioButton_8_clicked()
+{
+    bool radio9 = ui->radioButton_9->isChecked();
+    if (radio9)
+        ui->frame_5->setEnabled(true);
+    else
+        ui->frame_5->setEnabled(false);
+    ui->display->set_analysis(radio9);
+}
+
+void MainWindow::on_radioButton_clicked()
+{
+    bool radio = ui->radioButton->isChecked();
+    ui->display->set_data_set(0);
+}
+
+void MainWindow::on_radioButton_2_clicked()
+{
+    bool radio = ui->radioButton_2->isChecked();
+    ui->display->set_data_set(1);
+}
+
+void MainWindow::on_radioButton_3_clicked()
+{
+    bool radio = ui->radioButton_3->isChecked();
+    ui->display->set_data_set(2);
+}
+
+void MainWindow::on_radioButton_4_clicked()
+{
+    bool radio = ui->radioButton_4->isChecked();
+    ui->display->set_data_set(3);
 }

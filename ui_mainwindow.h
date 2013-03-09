@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri Mar 8 01:04:31 2013
+** Created: Fri Mar 8 16:50:04 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -21,11 +21,13 @@
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
+#include <QtGui/QProgressBar>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QSlider>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
+#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include <display.h>
 
@@ -39,8 +41,6 @@ public:
     Display *display;
     QFrame *frame;
     QGridLayout *gridLayout;
-    QPushButton *start;
-    QPushButton *reset;
     QFrame *frame_2;
     QGridLayout *gridLayout_2;
     QRadioButton *radioButton;
@@ -66,6 +66,11 @@ public:
     QLabel *label_4;
     QLabel *label_5;
     QSlider *horizontalSlider_3;
+    QFrame *frame_6;
+    QVBoxLayout *verticalLayout;
+    QPushButton *start;
+    QPushButton *reset;
+    QProgressBar *progressBar;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -74,7 +79,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(741, 658);
+        MainWindow->resize(743, 750);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         horizontalLayout = new QHBoxLayout(centralWidget);
@@ -95,16 +100,6 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        start = new QPushButton(frame);
-        start->setObjectName(QString::fromUtf8("start"));
-
-        gridLayout->addWidget(start, 0, 0, 1, 1);
-
-        reset = new QPushButton(frame);
-        reset->setObjectName(QString::fromUtf8("reset"));
-
-        gridLayout->addWidget(reset, 0, 1, 1, 1);
-
         frame_2 = new QFrame(frame);
         frame_2->setObjectName(QString::fromUtf8("frame_2"));
         frame_2->setFrameShape(QFrame::StyledPanel);
@@ -182,11 +177,13 @@ public:
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
         radioButton_8 = new QRadioButton(frame_4);
         radioButton_8->setObjectName(QString::fromUtf8("radioButton_8"));
+        radioButton_8->setChecked(false);
 
         gridLayout_4->addWidget(radioButton_8, 0, 0, 1, 1);
 
         radioButton_9 = new QRadioButton(frame_4);
         radioButton_9->setObjectName(QString::fromUtf8("radioButton_9"));
+        radioButton_9->setChecked(true);
 
         gridLayout_4->addWidget(radioButton_9, 1, 0, 1, 1);
 
@@ -203,12 +200,16 @@ public:
         gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
         horizontalSlider = new QSlider(frame_5);
         horizontalSlider->setObjectName(QString::fromUtf8("horizontalSlider"));
+        horizontalSlider->setMinimum(1);
+        horizontalSlider->setMaximum(20);
         horizontalSlider->setOrientation(Qt::Horizontal);
 
         gridLayout_5->addWidget(horizontalSlider, 1, 0, 1, 1);
 
         horizontalSlider_2 = new QSlider(frame_5);
         horizontalSlider_2->setObjectName(QString::fromUtf8("horizontalSlider_2"));
+        horizontalSlider_2->setMinimum(1);
+        horizontalSlider_2->setMaximum(4);
         horizontalSlider_2->setOrientation(Qt::Horizontal);
 
         gridLayout_5->addWidget(horizontalSlider_2, 5, 0, 1, 1);
@@ -230,6 +231,8 @@ public:
 
         horizontalSlider_3 = new QSlider(frame_5);
         horizontalSlider_3->setObjectName(QString::fromUtf8("horizontalSlider_3"));
+        horizontalSlider_3->setMinimum(10);
+        horizontalSlider_3->setMaximum(33);
         horizontalSlider_3->setOrientation(Qt::Horizontal);
 
         gridLayout_5->addWidget(horizontalSlider_3, 3, 0, 1, 1);
@@ -237,13 +240,40 @@ public:
 
         gridLayout->addWidget(frame_5, 5, 0, 1, 2);
 
+        frame_6 = new QFrame(frame);
+        frame_6->setObjectName(QString::fromUtf8("frame_6"));
+        frame_6->setFrameShape(QFrame::StyledPanel);
+        frame_6->setFrameShadow(QFrame::Raised);
+        verticalLayout = new QVBoxLayout(frame_6);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        start = new QPushButton(frame_6);
+        start->setObjectName(QString::fromUtf8("start"));
+
+        verticalLayout->addWidget(start);
+
+        reset = new QPushButton(frame_6);
+        reset->setObjectName(QString::fromUtf8("reset"));
+
+        verticalLayout->addWidget(reset);
+
+        progressBar = new QProgressBar(frame_6);
+        progressBar->setObjectName(QString::fromUtf8("progressBar"));
+        progressBar->setValue(0);
+
+        verticalLayout->addWidget(progressBar);
+
+
+        gridLayout->addWidget(frame_6, 0, 0, 1, 2);
+
 
         horizontalLayout->addWidget(frame);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 741, 22));
+        menuBar->setGeometry(QRect(0, 0, 743, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -260,8 +290,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
-        start->setText(QApplication::translate("MainWindow", "Start", 0, QApplication::UnicodeUTF8));
-        reset->setText(QApplication::translate("MainWindow", "Reset", 0, QApplication::UnicodeUTF8));
         radioButton->setText(QApplication::translate("MainWindow", "Iris-setosa", 0, QApplication::UnicodeUTF8));
         radioButton_2->setText(QApplication::translate("MainWindow", "Iris-versicolor", 0, QApplication::UnicodeUTF8));
         radioButton_3->setText(QApplication::translate("MainWindow", "Iris-virginica", 0, QApplication::UnicodeUTF8));
@@ -276,6 +304,8 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "Max Iterations", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("MainWindow", "Perceptron Dimensions", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("MainWindow", "Training Set (%)", 0, QApplication::UnicodeUTF8));
+        start->setText(QApplication::translate("MainWindow", "Start", 0, QApplication::UnicodeUTF8));
+        reset->setText(QApplication::translate("MainWindow", "Reset", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -27,6 +27,26 @@ public slots:
 
 private slots:
 
+    void on_start_clicked();
+
+    void on_horizontalSlider_sliderMoved(int position);
+
+    void on_horizontalSlider_3_sliderMoved(int position);
+
+    void on_horizontalSlider_2_sliderMoved(int position);
+
+    void on_radioButton_9_clicked();
+
+    void on_radioButton_8_clicked();
+
+    void on_radioButton_clicked();
+
+    void on_radioButton_2_clicked();
+
+    void on_radioButton_3_clicked();
+
+    void on_radioButton_4_clicked();
+
 private:
     Ui::MainWindow *ui;
 
