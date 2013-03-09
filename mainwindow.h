@@ -29,11 +29,11 @@ private slots:
 
     void on_start_clicked();
 
-    void on_horizontalSlider_sliderMoved(int position);
+    void on_horizontalSlider_valueChanged(int position);
 
-    void on_horizontalSlider_3_sliderMoved(int position);
+    void on_horizontalSlider_3_valueChanged(int position);
 
-    void on_horizontalSlider_2_sliderMoved(int position);
+    void on_horizontalSlider_2_valueChanged(int position);
 
     void on_radioButton_9_clicked();
 

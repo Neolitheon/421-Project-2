@@ -43,6 +43,21 @@ Display::Display(QWidget *parent) :
 {
 }
 
+float Display::training_accuracy(QVector<SolvedDataPoint> points, int training_size)
+{
+    int correct = 0;
+    for (int i=0; i<points.size(); i++)
+    {
+        //printf("%d%d", int(points[i].classification), int(points[i].calculatedClassification));
+        if (points[i].classification == points[i].calculatedClassification && points[i].trainingExample == true)
+        {
+            correct += 1;
+        }
+    }
+    return correct/float(training_size);
+}
+
+
 float Display::accuracy(QVector<SolvedDataPoint> points, int training_size)
 {
     int correct = 0;
@@ -127,6 +142,7 @@ QVector< QVector<float> > Display::analyse_accuracy()
         for (int training_size=1; training_size<points.size()/4; training_size++)
         {
             float trials_accuracy = 0;
+            float trails_training_accuracy = 0;
             for (int trials=0; trials<100; trials++)
             {
                 switch(switch_algorithim)
@@ -142,10 +158,11 @@ QVector< QVector<float> > Display::analyse_accuracy()
                 //run algorithim
                 QVector<SolvedDataPoint> data_points = run_algorithim(points,training_size, max_it);
                 trials_accuracy += accuracy(data_points, training_size);
+                trails_training_accuracy += training_accuracy(data_points, training_size);
 
             }
             if(max_it % 5 == 0 || max_it == 1) {
-                printf("Completed: Iterations:[%i] Training set: [%f] with accuracy [%f] \n",max_it,(float)training_size/(float)points.size()*100,trials_accuracy);
+                printf("Completed: Iterations:[%i] Training set: [%f] with accuracy [%f] & training accuracy [%f] \n",max_it,(float)training_size/(float)points.size()*100,trials_accuracy, trails_training_accuracy);
             }
             fflush(stdout);
             temp.push_back(trials_accuracy/100.0);

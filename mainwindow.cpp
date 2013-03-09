@@ -45,19 +45,19 @@ void MainWindow::on_start_clicked()
     ui->display->start();
 }
 
-void MainWindow::on_horizontalSlider_sliderMoved(int position)
+void MainWindow::on_horizontalSlider_valueChanged(int position)
 {
     ui->display->set_maximum_iterations(position);
     ui->lcdNumber->setProperty("value", position);
 }
 
-void MainWindow::on_horizontalSlider_3_sliderMoved(int position)
+void MainWindow::on_horizontalSlider_3_valueChanged(int position)
 {
     ui->display->set_training_set_size(position);
     ui->lcdNumber_2->setProperty("value", position);
 }
 
-void MainWindow::on_horizontalSlider_2_sliderMoved(int position)
+void MainWindow::on_horizontalSlider_2_valueChanged(int position)
 {
     ui->display->set_perceptron_degree(position);
     ui->lcdNumber_3->setProperty("value", position);

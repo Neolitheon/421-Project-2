@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sat Mar 9 10:50:58 2013
+** Created: Sat Mar 9 11:12:32 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -72,6 +72,10 @@ public:
     QFrame *frame_6;
     QVBoxLayout *verticalLayout;
     QPushButton *start;
+    QLabel *label_6;
+    QLabel *label_7;
+    QLabel *label_8;
+    QLabel *label_9;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -274,6 +278,26 @@ public:
 
         verticalLayout->addWidget(start);
 
+        label_6 = new QLabel(frame_6);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+
+        verticalLayout->addWidget(label_6);
+
+        label_7 = new QLabel(frame_6);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+
+        verticalLayout->addWidget(label_7);
+
+        label_8 = new QLabel(frame_6);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+
+        verticalLayout->addWidget(label_8);
+
+        label_9 = new QLabel(frame_6);
+        label_9->setObjectName(QString::fromUtf8("label_9"));
+
+        verticalLayout->addWidget(label_9);
+
 
         gridLayout->addWidget(frame_6, 0, 0, 1, 2);
 
@@ -306,7 +330,7 @@ public:
         radioButton_4->setText(QApplication::translate("MainWindow", "Blood.", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Data Set", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "Algorithim", 0, QApplication::UnicodeUTF8));
-        radioButton_5->setText(QApplication::translate("MainWindow", "Kernel -Polynomial", 0, QApplication::UnicodeUTF8));
+        radioButton_5->setText(QApplication::translate("MainWindow", "Kernel - Polynomial", 0, QApplication::UnicodeUTF8));
         radioButton_6->setText(QApplication::translate("MainWindow", "Kernel - Gaussian", 0, QApplication::UnicodeUTF8));
         radioButton_7->setText(QApplication::translate("MainWindow", "Boosting", 0, QApplication::UnicodeUTF8));
         radioButton_8->setText(QApplication::translate("MainWindow", "Analyse", 0, QApplication::UnicodeUTF8));
@@ -315,6 +339,10 @@ public:
         label_4->setText(QApplication::translate("MainWindow", "Perceptron Dimensions", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("MainWindow", "Training Set (%)", 0, QApplication::UnicodeUTF8));
         start->setText(QApplication::translate("MainWindow", "Start", 0, QApplication::UnicodeUTF8));
+        label_6->setText(QApplication::translate("MainWindow", "X axis: # of iterations", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("MainWindow", "Y axis: training set size", 0, QApplication::UnicodeUTF8));
+        label_8->setText(QApplication::translate("MainWindow", "Origin: top left", 0, QApplication::UnicodeUTF8));
+        label_9->setText(QApplication::translate("MainWindow", "Green = high accuracy", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

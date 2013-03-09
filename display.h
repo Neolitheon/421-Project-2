@@ -69,6 +69,7 @@ private:
     int calc_finished;
 
     float accuracy(QVector<SolvedDataPoint> points, int training_size);
+    float training_accuracy(QVector<SolvedDataPoint> points, int training_size);
 };
 
 
