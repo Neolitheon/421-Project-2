@@ -136,6 +136,7 @@ QVector< QVector<float> > Display::analyse_accuracy()
     QVector<DataPoint> points = read_file();
 
     QVector< QVector<float> > accuracy_points;
+    int num_of_trials = 15;
     for (int max_it=1; max_it<21; max_it++)
     {
         QVector<float> temp;
@@ -143,7 +144,7 @@ QVector< QVector<float> > Display::analyse_accuracy()
         {
             float trials_accuracy = 0;
             float trails_training_accuracy = 0;
-            for (int trials=0; trials<100; trials++)
+            for (int trials=0; trials<num_of_trials; trials++)
             {
                 switch(switch_algorithim)
                 {
@@ -162,10 +163,10 @@ QVector< QVector<float> > Display::analyse_accuracy()
 
             }
             if(max_it % 5 == 0 || max_it == 1) {
-                printf("Completed: Iterations:[%i] Training set: [%f] with accuracy [%f] & training accuracy [%f] \n",max_it,(float)training_size/(float)points.size()*100,trials_accuracy, trails_training_accuracy);
+                printf("Completed: Iterations:[%i] Training set: [%f] with accuracy [%f] & training accuracy [%f] \n",max_it,(float)training_size/(float)points.size()*100,trials_accuracy*100/(float)num_of_trials, trails_training_accuracy*100/(float)num_of_trials);
             }
             fflush(stdout);
-            temp.push_back(trials_accuracy/100.0);
+            temp.push_back(trials_accuracy/(float)num_of_trials);
 
         }
         printf("Completed iteration [%i]\n",max_it);
