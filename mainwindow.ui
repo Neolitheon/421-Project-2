@@ -112,7 +112,7 @@
           <item row="2" column="0">
            <widget class="QRadioButton" name="radioButton_6">
             <property name="text">
-             <string>Kernel (WIP)</string>
+             <string>Kernel - Gaussian</string>
             </property>
            </widget>
           </item>

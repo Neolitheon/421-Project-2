@@ -11,8 +11,8 @@
 #include "structures.h"
 
 
-        QVector<SolvedDataPoint> kPerceptronSolver(QVector<DataPoint> input, int training, int maxIter, int d);
-
-
+        QVector<SolvedDataPoint> kPerceptronSolver(QVector<DataPoint> input, int training, int maxIter, int d, int type);
+        float qVectorLength(QVector<float> a);
         float qVectorDotProd(QVector<float> a, QVector<float> b);
+        QVector<float> qVectorSubtraction(QVector<float> a, QVector<float> b);
 

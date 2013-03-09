@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sat Mar 9 00:12:05 2013
+** Created: Sat Mar 9 10:50:58 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -307,7 +307,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "Data Set", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "Algorithim", 0, QApplication::UnicodeUTF8));
         radioButton_5->setText(QApplication::translate("MainWindow", "Kernel -Polynomial", 0, QApplication::UnicodeUTF8));
-        radioButton_6->setText(QApplication::translate("MainWindow", "Kernel (WIP)", 0, QApplication::UnicodeUTF8));
+        radioButton_6->setText(QApplication::translate("MainWindow", "Kernel - Gaussian", 0, QApplication::UnicodeUTF8));
         radioButton_7->setText(QApplication::translate("MainWindow", "Boosting", 0, QApplication::UnicodeUTF8));
         radioButton_8->setText(QApplication::translate("MainWindow", "Analyse", 0, QApplication::UnicodeUTF8));
         radioButton_9->setText(QApplication::translate("MainWindow", "Run one data set", 0, QApplication::UnicodeUTF8));

@@ -62,6 +62,8 @@ private:
     float training_set_size;
     int number;
     int progress;
+    char *iris_file_path;
+    char *blood_file_path;
 
     QVector< QVector<float> > accuracy_points;
     int calc_finished;

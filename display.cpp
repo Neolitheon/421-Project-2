@@ -7,6 +7,9 @@
 #include <algorithm>
 #include <ctime>
 
+#define IRIS_PATH "/Users/naleliunas/Documents/421-Project-1/iris.data"
+#define BLOOD_PATH "/Users/naleliunas/Documents/421-Project-1/transfusion.data"
+
 //http://www.cplusplus.com/forum/general/4422/
 //http://www.cplusplus.com/articles/1UqpX9L8/
 
@@ -142,11 +145,13 @@ QVector< QVector<float> > Display::analyse_accuracy()
 
             }
             if(max_it % 5 == 0 || max_it == 1) {
-                printf("completed iteration iterations:[%i] Training set : [%f] with accuracy %f \n",max_it,(float)training_size/(float)points.size()*100,trials_accuracy);
+                printf("Completed: Iterations:[%i] Training set: [%f] with accuracy [%f] \n",max_it,(float)training_size/(float)points.size()*100,trials_accuracy);
             }
             fflush(stdout);
             temp.push_back(trials_accuracy/100.0);
+
         }
+        printf("Completed iteration [%i]\n",max_it);
         accuracy_points.push_back(temp);
     }
 
@@ -191,8 +196,10 @@ QVector<SolvedDataPoint> Display::run_algorithim(QVector<DataPoint> points, int 
     switch(switch_algorithim)
     {
         case 0:
+            data_points = kPerceptronSolver(points, training_size, max_it, perceptron_degree, 0);
+            break;
         case 1:
-            data_points = kPerceptronSolver(points, training_size, max_it, perceptron_degree);
+            data_points = kPerceptronSolver(points, training_size, max_it, perceptron_degree, 1);
             break;
         case 2:
             data_points = Booster::boost(points, training_size, max_it);
@@ -220,30 +227,35 @@ void Display::paintGL()
     glVertex3f(0, 0.0f, -1.27);
     glEnd();
 
-    if (calc_finished == 0)
+    if (calc_finished == 0) {
         return;
+    } else {
+        //THESE VALUES NEED TO BE DYNAMICALLY CALCULATED FROM 1.27 / 2 / MAXIT-1 AND POINTS.SIZE()/4-1
+        float xsize = 0.0669;
+        //float zsize = 0.0363;
+        float zsize = 1.27/(accuracy_points[0].size()-1);
+        //printf("accuracy_points[0].size():%d\n", accuracy_points[0].size());
+        //printf("zsize:%f\n", zsize);
 
-    //THESE VALUES NEED TO BE DYNAMICALLY CALCULATED FROM 1.27 / 2 / MAXIT-1 AND POINTS.SIZE()/4-1
-    float xsize = 0.0669;
-    float zsize = 0.0363;
-    float blue;
-    float green;
-    for (int i=0; i<20; i++)
-    {
-        for (int j=0; j<36; j++)
+        float blue;
+        float green;
+        for (int i=0; i<20; i++)
         {
-            float x = i/19.0*-1.27;
-            float z = j/35.0*-1.27;
-            green = accuracy_points[i][j];
-            //red =1;
-            blue = 1 - green;
-            glColor3f(0,green,blue);
-            glBegin(GL_QUADS);
-            glVertex3f(x, 0.0f, z);
-            glVertex3f(x-xsize, 0.0f, z);
-            glVertex3f(x-xsize, 0.0f, z-zsize);
-            glVertex3f(x, 0.0f, z-zsize);
-            glEnd();
+            for (int j=0; j<accuracy_points[i].size(); j++)
+            {
+                float x = i/19.0*-1.27;
+                float z = j/float(accuracy_points[i].size()-1)*-1.27;
+                green = accuracy_points[i][j];
+                //red =1;
+                blue = 1 - green;
+                glColor3f(0,green,blue);
+                glBegin(GL_QUADS);
+                glVertex3f(x, 0.0f, z);
+                glVertex3f(x-xsize, 0.0f, z);
+                glVertex3f(x-xsize, 0.0f, z-zsize);
+                glVertex3f(x, 0.0f, z-zsize);
+                glEnd();
+            }
         }
     }
 
@@ -266,9 +278,13 @@ QVector<DataPoint> Display::read_file()
 
     QFile file;
     if(switch_data_set == 0 || switch_data_set ==1 || switch_data_set ==2) { //set 0,1,2 to the three irises
-        file.setFileName("/Users/naleliunas/Documents/421-Project-1/iris.data");
+        //file.setFileName("/Users/naleliunas/Documents/421-Project-1/iris.data");
+        file.setFileName(IRIS_PATH);
+
     } else if(switch_data_set == 3) { //blood data set
-        file.setFileName("/Users/naleliunas/Documents/421-Project-1/transfusion.data");
+        //file.setFileName("/Users/naleliunas/Documents/421-Project-1/transfusion.data");
+        file.setFileName(BLOOD_PATH);
+
     }
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream in(&file);

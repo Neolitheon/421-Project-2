@@ -29,6 +29,10 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+OTHER_FILES += \
+    transfusion.data \
+    iris.data
+
 
 
 
