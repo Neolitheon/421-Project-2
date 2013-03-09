@@ -159,11 +159,14 @@ QVector< QVector<float> > Display::analyse_accuracy()
                 //run algorithim
                 QVector<SolvedDataPoint> data_points = run_algorithim(points,training_size, max_it);
                 trials_accuracy += accuracy(data_points, training_size);
-                printf("completed iteration [%i][%i][%i] with accuracy %f \n",max_it,training_size,trials,accuracy(data_points, training_size));
+
             }
            // printf("max_it:%d size:%d accuracy: %f\n", max_it, training_size, trials_accuracy/100);
             //printf("%d %d %f\n", max_it, training_size, trials_accuracy/100);
             temp.push_back(trials_accuracy/100.0);
+            if(max_it % 5 == 0 || max_it == 1) {
+                printf("completed iteration [%i][%d] with accuracy %f \n",max_it,(float)training_size/(float)points.size(),trials_accuracy/100.0);
+            }
         }
         accuracy_points.push_back(temp);
     }
