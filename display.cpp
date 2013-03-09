@@ -81,10 +81,12 @@ void Display::start()
     switch(switch_analysis)
     {
         case 0:
+            printf("Analysis Started\n");
             accuracy_points = analyse_accuracy();
             calc_finished = 1;
             break;
         case 1:
+            printf("Single Use Started\n");
             points = read_file();
             switch(switch_algorithim)
             {
