@@ -52,6 +52,12 @@ def writeToCNFFile(puzzle, min_or_ext):
 		ext = True
 
 	f = open('output.cnf', 'w')
+	sum = 0
+	for x in range (1,10):
+		for y in range (1,10):
+			if puzzle[x-1][y-1] != 0:
+				sum += 1
+	f.write("p cnf 729 %d\n" % (sum+8829))
 	#Minimum
 	#VARIABLES
 	for x in range (1,10):
