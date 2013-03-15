@@ -9,7 +9,7 @@ FIRST PART:
 
 Input:
 
-    9x9 = 81 characters. 1-9, and a "wild card", which maybe anything from A-Z or !-)
+    9x9 = 81 characters. 1-9, and a "wild card", which maybe 0, ., *, ?
     May have arbitrary whitespace.
 
 Output:
