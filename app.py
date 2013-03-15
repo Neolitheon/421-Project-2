@@ -1,3 +1,5 @@
+import sys
+
 blank = ['.', '?', '*']
 
 def readFile(filename):
@@ -44,9 +46,12 @@ def initPuzzle(filename):
 		line_count += 1 
 	return puzzle
 
-def writeToCNFFile(puzzle, extended):
+def writeToCNFFile(puzzle, min_or_ext):
+	ext = False
+	if min_or_ext == 'ext':
+		ext = True
+
 	f = open('output.cnf', 'w')
-	
 	#Minimum
 	#AT LEAST ONE NUMBER
 	for x in range (1, 10):
@@ -65,36 +70,37 @@ def writeToCNFFile(puzzle, extended):
 	    for z in range(1,10):
 	        for x in range(1,9):
 	            for i in range(1+x,10):
-	                print "-"+str(x)+str(y)+str(z)+" -"+str(i)+str(y)+str(z)+" 0"
-	
+					to_print = "-"+str(x)+str(y)+str(z)+" -"+str(i)+str(y)+str(z)+" 0\n"
+					f.write(to_print)
 	#at most once in each row
 	for x in range(1,10):
 	    for z in range(1,10):
 	        for y in range(1,9):
 	            for i in range(1+y,10):
-	                print "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0"
-	
+	                to_print = "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0\n"
+                    f.write(to_print)
+
 	#at most once in each box
 	for z in range(1,10):
 	    for i in range(0,3):
 	        for j in range(0,3):
 	            for y in range(1,4):
-	                for z in range(1,4):
+	                for x in range(1,4):
 	                    for k in range(y+1,4):
-	                        print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0"
-	
+	                        to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0\n"
+                           f.write(to_print)
+
 	for z in range(1,10):
 	    for i in range(0,3):
 	        for j in range(0,3):
 	            for y in range(1,4):
-	                for z in range(1,4):
+	                for x in range(1,4):
 	                    for k in range(x+1,4):
 	                        for l in range(1,4):
-	                            print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0"       
+	                            to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0\n"
+                                f.write(to_print)  
 
-
-	#Extended
-	if extended == 1:
+	if ext:
 		#AT MOST ONE NUMBER
 		for x in range (1, 10):
 			for y in range (1, 10):
@@ -125,9 +131,19 @@ def writeToCNFFile(puzzle, extended):
 	f.close()
 			
 def main():
-	puzzle = initPuzzle('input.txt')
+	min_or_ext_list = ['min', 'ext']
+	if len(sys.argv) != 3:
+		print("Please put in the correct arguments: <filename> <min/ext>")
+		exit(1)
+	if sys.argv[2] not in min_or_ext_list:
+		print("Please make second argument 'min' or 'ext'")
+	
+	input_file = sys.argv[1]
+	min_or_ext = sys.argv[2]
+
+	puzzle = initPuzzle(input_file)
 	printPuzzle(puzzle)
-	writeToCNFFile(puzzle)
+	writeToCNFFile(puzzle, min_or_ext)
 
 if __name__ == "__main__":
 	main()
