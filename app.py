@@ -60,6 +60,38 @@ def writeToCNFFile(puzzle, extended):
 				cnf_clause ="%d%d%d 0\n" % (x,y,puzzle[x-1][y-1]) 
 			f.write(cnf_clause)
 
+	#At most once in each column
+	for y in range(1,10):
+	    for z in range(1,10):
+	        for x in range(1,9):
+	            for i in range(1+x,10):
+	                print "-"+str(x)+str(y)+str(z)+" -"+str(i)+str(y)+str(z)+" 0"
+	
+	#at most once in each row
+	for x in range(1,10):
+	    for z in range(1,10):
+	        for y in range(1,9):
+	            for i in range(1+y,10):
+	                print "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0"
+	
+	#at most once in each box
+	for z in range(1,10):
+	    for i in range(0,3):
+	        for j in range(0,3):
+	            for y in range(1,4):
+	                for z in range(1,4):
+	                    for k in range(y+1,4):
+	                        print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0"
+	
+	for z in range(1,10):
+	    for i in range(0,3):
+	        for j in range(0,3):
+	            for y in range(1,4):
+	                for z in range(1,4):
+	                    for k in range(x+1,4):
+	                        for l in range(1,4):
+	                            print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0"       
+
 
 	#Extended
 	if extended == 1:
@@ -68,11 +100,10 @@ def writeToCNFFile(puzzle, extended):
 			for y in range (1, 10):
 				for z in range (1, 10):
 					cnf_clause = ""
-					if m[x-1][y-1] == z:
+					if puzzle[x-1][y-1] == z:
 						for i in range (z, 10):
-							cnf_clause += "-%d%d%d " % (x,y,i) 
-						cnf_clause += "0\n"
-						f.write(cnf_clause)
+							cnf_clause += "-%d%d%d 0\n" % (x,y,i) 
+							f.write(cnf_clause)
 					else if m[x-1][y-1] == 0:
 						for i in range (z, 10):
 							cnf_clause += "-%d%d%d -%d%d%d 0\n" % (x,y,z,x,y,i)
@@ -81,7 +112,16 @@ def writeToCNFFile(puzzle, extended):
 						cnf_clause += "-%d%d%d 0\n" % (x,y,z) 
 						f.write(cnf_clause)
 						
-		#AT LEAST ONE IN EACH ROW	
+		#AT LEAST ONE IN EACH ROW
+		for y in range (1, 10):
+			for z in range (1, 10):
+				for x in range (1, 10):
+					cnf_clause = ""
+					if puzzle[x-1][y-1] == z
+						cnf_clause += "%d%d%d 0\n" % (x,y,z) 
+						f.write(cnf_clause)
+					if	puzzle[x-1][y-1] == 0
+						
 	f.close()
 			
 def main():
