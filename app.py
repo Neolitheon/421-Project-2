@@ -66,6 +66,44 @@ def writeToCNFFile(puzzle, min_or_ext):
 				else:
 					cnf_clause ="%d%d%d 0\n" % (x,y,puzzle[x-1][y-1]) 
 				f.write(cnf_clause)
+		
+		#At most once in each column
+		for y in range(1,10):
+		    for z in range(1,10):
+		        for x in range(1,9):
+		            for i in range(1+x,10):
+						to_print = "-"+str(x)+str(y)+str(z)+" -"+str(i)+str(y)+str(z)+" 0\n"
+						f.write(to_print)
+	
+		#at most once in each row
+		for x in range(1,10):
+		    for z in range(1,10):
+		        for y in range(1,9):
+		            for i in range(1+y,10):
+		                to_print = "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0\n"
+                        f.write(to_print)
+
+		#at most once in each box
+		for z in range(1,10):
+		    for i in range(0,3):
+		        for j in range(0,3):
+		            for y in range(1,4):
+		                for x in range(1,4):
+		                    for k in range(y+1,4):
+		                        to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0\n"
+                                f.write(to_print)
+
+		for z in range(1,10):
+		    for i in range(0,3):
+		        for j in range(0,3):
+		            for y in range(1,4):
+		                for x in range(1,4):
+		                    for k in range(x+1,4):
+		                        for l in range(1,4):
+		                            to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0\n"
+                                    f.write(to_print)  
+		f.close()
+
 
 	if ext:
 		pass
