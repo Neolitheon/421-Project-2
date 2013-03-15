@@ -57,7 +57,10 @@ def writeToCNFFile(puzzle, min_or_ext):
 		for y in range (1,10):
 			if puzzle[x-1][y-1] != 0:
 				sum += 1
-	f.write("p cnf 729 %d\n" % (sum+8829))
+	sum += 8748
+	if ext:
+		sum += 2916
+	f.write("p cnf 729 %d\n" % sum)
 	#Minimum
 	#VARIABLES
 	for x in range (1,10):
@@ -95,19 +98,15 @@ def writeToCNFFile(puzzle, min_or_ext):
 					f.write(cnf_clause)
 
 	f.write("c At most once in each 3x3 grid\n")
-	sum = 0
-	#at most once in each box
+	sum = 0	#at most once in each box
 	for z in range(1,10):
 		for i in range(0,3):
 			for j in range(0,3):
 				for x in range(1,4):
 					for y in range(1,4):
 						for k in range(1+y,4):
-							sum += 1
 							cnf_clause = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0\n"
 							f.write(cnf_clause)
-	print "sum : %d\n" % sum
-	sum = 0
 	for z in range(1,10):
 	    for i in range(0,3):
 	        for j in range(0,3):
@@ -115,10 +114,8 @@ def writeToCNFFile(puzzle, min_or_ext):
 	                for x in range(1,4):
 	                    for k in range(1+x,4):
 	                        for l in range(1,4):
-								sum += 1
 								cnf_clause = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0\n"
 								f.write(cnf_clause)  
-	print "sum : %d\n" % sum
 
 	#Extended
 	if ext:
@@ -132,7 +129,6 @@ def writeToCNFFile(puzzle, min_or_ext):
 						f.write(cnf_clause)
 						
 		#AT LEAST ONE IN EACH ROW
-		
 		f.write("c A number appears at least once in each row\n")
 		for y in range (1, 10):
 			for z in range (1, 10):
