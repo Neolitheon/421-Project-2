@@ -67,6 +67,7 @@ def writeToCNFFile(puzzle, min_or_ext):
 				cnf_clause ="%d%d%d 0\n" % (x,y,puzzle[x-1][y-1]) 
 			f.write(cnf_clause)
 		
+	f.write("c At most once in each column")
 	#At most once in each column
 	for y in range(1,10):
 	    for z in range(1,10):
@@ -75,6 +76,7 @@ def writeToCNFFile(puzzle, min_or_ext):
 	            	if(puzzle[x-1][y-1]!=z):
 	            		if(puzzle[i-1][y-1]!=z):
 	            			#both true, so so skip clause
+	            			continue;
 	                	else:
 	                		#only -xyz is true
 	                		f.write("-"+str(x)+str(y)+str(z)+" 0")
@@ -82,38 +84,39 @@ def writeToCNFFile(puzzle, min_or_ext):
 	                	if(puzzle[i-1][y-1]!=z):
 	                		#only -xyz is true
 	                		f.write("-"+str(i)+str(y)+str(z)+" 0")
-	                	else
+	                	#else
 	                		#error
 	
-		#at most once in each row
-		for x in range(1,10):
-		    for z in range(1,10):
-		        for y in range(1,9):
-		            for i in range(1+y,10):
-		                to_print = "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0\n"
-                        f.write(to_print)
+	f.write("c At most once in each row")
+	#at most once in each row
+	for x in range(1,10):
+	    for z in range(1,10):
+	        for y in range(1,9):
+	            for i in range(1+y,10):
+	                to_print = "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0\n"
+                    f.write(to_print)
 
+	f.write("c At most once in each 9x9 grid")
+	#at most once in each box
+	for z in range(1,10):
+	    for i in range(0,3):
+	        for j in range(0,3):
+	            for y in range(1,4):
+	                for x in range(1,4):
+	                    for k in range(y+1,4):
+	                        to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0\n"
+                            f.write(to_print)
 
-		#at most once in each box
-		for z in range(1,10):
-		    for i in range(0,3):
-		        for j in range(0,3):
-		            for y in range(1,4):
-		                for x in range(1,4):
-		                    for k in range(y+1,4):
-		                        to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0\n"
-                                f.write(to_print)
-
-		for z in range(1,10):
-		    for i in range(0,3):
-		        for j in range(0,3):
-		            for y in range(1,4):
-		                for x in range(1,4):
-		                    for k in range(x+1,4):
-		                        for l in range(1,4):
-		                            to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0\n"
-                                    f.write(to_print)  
-		f.close()
+	for z in range(1,10):
+	    for i in range(0,3):
+	        for j in range(0,3):
+	            for y in range(1,4):
+	                for x in range(1,4):
+	                    for k in range(x+1,4):
+	                        for l in range(1,4):
+	                            to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0\n"
+                                f.write(to_print)  
+	f.close()
 
 
 	if ext:
