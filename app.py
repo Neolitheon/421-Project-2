@@ -44,7 +44,7 @@ def initPuzzle(filename):
 		line_count += 1 
 	return puzzle
 
-def writeToCNFFile(puzzle):
+def writeToCNFFile(puzzle, extended):
 	f = open('output.cnf', 'w')
 	
 	#Minimum
@@ -59,19 +59,30 @@ def writeToCNFFile(puzzle):
 			else:
 				cnf_clause ="%d%d%d 0\n" % (x,y,puzzle[x-1][y-1]) 
 			f.write(cnf_clause)
-	f.close()
+
 
 	#Extended
-	#AT MOST ONE NUMBER
-#	for x from 1 to 9:
-#		for y from 1 to 9:
-#			for z from 1 to 8:
-#				if m[x][y] == z
-#					for i from z to 9:
-#						cnf_clause += "-%d%d%d " %(x,y,i) 
-#					cnf_clause += "0"
-
-
+	if extended == 1:
+		#AT MOST ONE NUMBER
+		for x in range (1, 10):
+			for y in range (1, 10):
+				for z in range (1, 10):
+					cnf_clause = ""
+					if m[x-1][y-1] == z:
+						for i in range (z, 10):
+							cnf_clause += "-%d%d%d " % (x,y,i) 
+						cnf_clause += "0\n"
+						f.write(cnf_clause)
+					else if m[x-1][y-1] == 0:
+						for i in range (z, 10):
+							cnf_clause += "-%d%d%d -%d%d%d 0\n" % (x,y,z,x,y,i)
+							f.write(cnf_clause)
+					else:
+						cnf_clause += "-%d%d%d 0\n" % (x,y,z) 
+						f.write(cnf_clause)
+						
+		#AT LEAST ONE IN EACH ROW	
+	f.close()
 			
 def main():
 	puzzle = initPuzzle('input.txt')
