@@ -66,14 +66,26 @@ def writeToCNFFile(puzzle):
 	    for z in range(1,10):
 	        for x in range(1,9):
 	            for i in range(1+x,10):
-	                print "-"+str(x)+str(y)+str(z)+" -"+str(i)+str(y)+str(z)+" 0"
+	            	if(puzzle[x-1][y-1]!=z):
+	            		if(puzzle[i-1][y-1]!=z):
+	            			#both true, so so skip clause
+	                	else:
+	                		#only -xyz is true
+	                		f.write("-"+str(x)+str(y)+str(z)+" 0")
+	                else if(puzzle[i-1][y-1]!=z):
+	                	if(puzzle[i-1][y-1]!=z):
+	                		#only -xyz is true
+	                		f.write("-"+str(i)+str(y)+str(z)+" 0")
+	                	else
+	                		#error
 	
 	#at most once in each row
 	for x in range(1,10):
 	    for z in range(1,10):
 	        for y in range(1,9):
 	            for i in range(1+y,10):
-	                print "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0"
+	            	if(!puzzle[x-1][-1y]==z):
+	                	print "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0"
 	
 	#at most once in each box
 	for z in range(1,10):
@@ -82,16 +94,18 @@ def writeToCNFFile(puzzle):
 	            for y in range(1,4):
 	                for z in range(1,4):
 	                    for k in range(y+1,4):
-	                        print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0"
+	                    	if(!puzzle[x][y][z]):
+	                        	print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0"
 	
 	for z in range(1,10):
 	    for i in range(0,3):
 	        for j in range(0,3):
 	            for y in range(1,4):
-	                for z in range(1,4):
+	                for x in range(1,4):
 	                    for k in range(x+1,4):
 	                        for l in range(1,4):
-	                            print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0"       
+	                        	if(!puzzle[x][y][z]):
+	                            	print "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0"       
 
 
 	#Extended
@@ -106,6 +120,14 @@ def writeToCNFFile(puzzle):
 
 
 			
+	#at least one number per 	
+	for z in range(1,10):
+		for i in range(0,3):
+			for j in range(0,3):
+				for x in range(1,4):
+					for y in range(1,4):
+						print str(3*i+x)+str(3*j+y)+str(z)+" 0"
+						
 def main():
 	puzzle = initPuzzle('input.txt')
 	printPuzzle(puzzle)
