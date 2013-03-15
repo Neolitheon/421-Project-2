@@ -54,6 +54,7 @@ def writeToCNFFile(puzzle, min_or_ext):
 	f = open('output.cnf', 'w')
 	#Minimum
 	#AT LEAST ONE NUMBER
+	f.write("c There is at least one number in each entry\n")
 	for x in range (1, 10):
 		for y in range (1, 10):
 			cnf_clause = ""
@@ -88,7 +89,7 @@ def writeToCNFFile(puzzle, min_or_ext):
 	                for x in range(1,4):
 	                    for k in range(y+1,4):
 	                        to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+x)+str(3*j+k)+str(z)+" 0\n"
-                           f.write(to_print)
+                        	f.write(to_print)
 
 	for z in range(1,10):
 	    for i in range(0,3):
@@ -98,35 +99,59 @@ def writeToCNFFile(puzzle, min_or_ext):
 	                    for k in range(x+1,4):
 	                        for l in range(1,4):
 	                            to_print = "-"+str(3*i+x)+str(3*j+y)+str(z)+" -"+str(3*i+k)+str(3*j+l)+str(z)+" 0\n"
-                                f.write(to_print)  
+                            	f.write(to_print)  
 
+	#Extended
 	if ext:
+	
 		#AT MOST ONE NUMBER
+		
+		f.write("c There is at most one number in each entry\n")
 		for x in range (1, 10):
 			for y in range (1, 10):
 				for z in range (1, 10):
 					cnf_clause = ""
 					if puzzle[x-1][y-1] == z:
 						for i in range (z, 10):
-							cnf_clause += "-%d%d%d 0\n" % (x,y,i) 
+							cnf_clause = "-%d%d%d 0\n" % (x,y,i) 
 							f.write(cnf_clause)
 					else if m[x-1][y-1] == 0:
 						for i in range (z, 10):
-							cnf_clause += "-%d%d%d -%d%d%d 0\n" % (x,y,z,x,y,i)
+							cnf_clause = "-%d%d%d -%d%d%d 0\n" % (x,y,z,x,y,i)
 							f.write(cnf_clause)
 					else:
-						cnf_clause += "-%d%d%d 0\n" % (x,y,z) 
+						cnf_clause = "-%d%d%d 0\n" % (x,y,z) 
 						f.write(cnf_clause)
 						
 		#AT LEAST ONE IN EACH ROW
+		
+		f.write("c A number appears at least once in each row\n")
 		for y in range (1, 10):
 			for z in range (1, 10):
+				cnf_clause = ""
 				for x in range (1, 10):
-					cnf_clause = ""
 					if puzzle[x-1][y-1] == z
-						cnf_clause += "%d%d%d 0\n" % (x,y,z) 
-						f.write(cnf_clause)
-					if	puzzle[x-1][y-1] == 0
+						cnf_clause = "%d%d%d 0" % (x,y,z) 
+						break
+					if puzzle[x-1][y-1] == 0
+						cnf_clause += "%d%d%d " % (x,y,z) 
+				cnf_clause += "\n"
+				f.write(cnf_clause)
+				
+		#AT LEAST ONE IN EACH COLUMN
+		
+		f.write("c A number appears at least once in each column\n")
+		for x in range (1, 10):
+			for z in range (1, 10):
+				cnf_clause = ""
+				for y in range (1, 10):
+					if puzzle[x-1][y-1] == z
+						cnf_clause = "%d%d%d 0" % (x,y,z) 
+						break
+					if puzzle[x-1][y-1] == 0
+						cnf_clause += "%d%d%d " % (x,y,z) 
+				cnf_clause += "\n"
+				f.write(cnf_clause)
 						
 	f.close()
 			
