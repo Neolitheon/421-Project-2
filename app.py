@@ -73,7 +73,7 @@ def writeToCNFFile(puzzle):
 	    for z in range(1,10):
 	        for y in range(1,9):
 	            for i in range(1+y,10):
-	                print "-"+str(x)+str(y)+str(z)+"-"+str(x)+str(i)+str(z)+" 0"
+	                print "-"+str(x)+str(y)+str(z)+" -"+str(x)+str(i)+str(z)+" 0"
 	
 	#at most once in each box
 	for z in range(1,10):
