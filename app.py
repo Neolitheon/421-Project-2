@@ -43,34 +43,40 @@ def initPuzzle(filename):
 		puzzle.append(numList)
 		line_count += 1 
 	return puzzle
+
 def writeToCNFFile(puzzle):
-#	AT LEAST ONE NUMBER
+	f = open('output.cnf', 'w')
+	
+	#Minimum
+	#AT LEAST ONE NUMBER
+	for x in range (1, 10):
+		for y in range (1, 10):
+			cnf_clause = ""
+			if puzzle[x-1][y-1] == 0:
+				for z in range (1, 10):
+					cnf_clause += "%d%d%d " % (x,y,z) 
+				cnf_clause += "0\n"
+			else:
+				cnf_clause ="%d%d%d 0\n" % (x,y,puzzle[x-1][y-1]) 
+			f.write(cnf_clause)
+	f.close()
 
-for x from 1 to 9:
-	for x from 1 to 9:
-		cnf_clause = ""
-		if puzzle[x][y] == 0
-			for z from 1 to 9:
-				cnf_clause += "-%d%d%d " %(x,y,z) 
-			cnf_clause += "0"
-		else
-			cnf_clause ="-%d%d%d " %(x,y,puzzle[x][y]) 
-		print to file cnf_clause
+	#Extended
+	#AT MOST ONE NUMBER
+#	for x from 1 to 9:
+#		for y from 1 to 9:
+#			for z from 1 to 8:
+#				if m[x][y] == z
+#					for i from z to 9:
+#						cnf_clause += "-%d%d%d " %(x,y,i) 
+#					cnf_clause += "0"
 
 
-#AT MOST ONE NUMBER
-
-for x from 1 to 9:
-	for y from 1 to 9:
-		for z from 1 to 8:
-			if m[x][y] == z
-				for i from z to 9:
-					cnf_clause += "-%d%d%d " %(x,y,i) 
-				cnf_clause += "0"
 			
 def main():
 	puzzle = initPuzzle('input.txt')
 	printPuzzle(puzzle)
+	writeToCNFFile(puzzle)
 
 if __name__ == "__main__":
 	main()
