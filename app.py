@@ -148,16 +148,17 @@ def writeToCNFFile(puzzle, min_or_ext):
 				cnf_clause += "0\n"
 				f.write(cnf_clause)
 		
-		
 		#AT LEAST ONE NUMBER PER 3x3 	
 		f.write("c Each number appears at least once in each 3x3 grid\n")
 		for z in range(1,10):
 			for i in range(0,3):
 				for j in range(0,3):
+					cnf_clause = ""
 					for x in range(1,4):
 						for y in range(1,4):
-							cnf_clause = str(3*i+x)+str(3*j+y)+str(z)+" 0\n"
-							f.write(cnf_clause)
+							cnf_clause += "%d%d%d " %((3*i+x),(3*j+y),(z))
+					cnf_clause += "0\n"
+					f.write(cnf_clause)
 	f.close()
 			
 def main():
