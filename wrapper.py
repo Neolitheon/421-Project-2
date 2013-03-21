@@ -12,8 +12,13 @@ def main():
 def NONSAT_HELPER():
 	arg = 'NONSAT_RUN(\'%s\')' % filename
 	t = timeit.Timer(arg, 'from __main__ import NONSAT_RUN')
-	elapsed = (1000000 * t.timeit(number=20)/20)
-	print "NONSAT takes %0.3f microseconds/pass" % elapsed
+	times = []
+	iterations = 20
+	for i in range(0, iterations):
+		elapsed = (1000000 * t.timeit(number=1))
+		times.append(elapsed)
+	times.sort()
+	print "NONSAT takes %0.3f microseconds/pass" % times[0]
 	
 
 def NONSAT_RUN(filename):
@@ -27,7 +32,12 @@ def SAT_HELPER():
 	output = 'output.cnf'
 	arg = 'SAT_RUN(\'%s\')' % output
 	t = timeit.Timer(arg, 'from __main__ import SAT_RUN')
-	elapsed = (1000000 * t.timeit(number=20)/20)
+	times = []
+	iterations = 20
+	for i in range(0, iterations):
+		elapsed = (1000000 * t.timeit(number=1))
+		times.append(elapsed)
+	times.sort()
 	print "SAT takes %0.3f microseconds/pass" % elapsed
 	
 
