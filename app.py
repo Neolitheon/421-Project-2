@@ -44,23 +44,23 @@ def initPuzzle(filename):
 			if len(numList) == 9:
 				puzzle.append(numList)
 				numList = []
-			if char_count >= 81:
+			if char_count > 81:
 				print "Greater than 81 characters"
 				break
 		line_count += 1 
-		if char_count >= 81:
+		if char_count > 81:
 			break
 	if char_count < 81:
 		print "not enough data"
 		exit(1)
 	return puzzle
 
-def writeToCNFFile(puzzle, min_or_ext):
+def writeToCNFFile(puzzle, min_or_ext, filename):
 	ext = False
 	if min_or_ext == 'ext':
 		ext = True
 
-	f = open('output.cnf', 'w')
+	f = open(filename + '.cnf', 'w')
 	sum = 0
 	for x in range (1,10):
 		for y in range (1,10):
@@ -183,7 +183,9 @@ def main():
 
 	puzzle = initPuzzle(input_file)
 	printPuzzle(puzzle)
-	writeToCNFFile(puzzle, min_or_ext)
+	
+	print "%s\n" % (input_file[:input_file.index('.')])
+	writeToCNFFile(puzzle, min_or_ext, input_file[:input_file.index('.')])
 
 if __name__ == "__main__":
 	main()
