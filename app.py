@@ -25,8 +25,9 @@ def initPuzzle(filename):
 	lines = readFile(filename)
 	puzzle = []
 	line_count = 1
+	char_count = 0
+	numList = []
 	for line in lines:
-		numList = []
 		for char in line:
 			char = char.strip()
 			if char == "":
@@ -36,14 +37,17 @@ def initPuzzle(filename):
 			try:
 				verify = int(char)
 				numList.append(verify)
+				char_count += 1
 			except:
 				print "fail"
 				exit(1)
-		if len(numList) != 9:
-			print "line %d not long enough" % (line_count)
-			exit(1)
-		puzzle.append(numList)
+			if len(numList) == 9:
+				puzzle.append(numList)
+				numList = []
 		line_count += 1 
+	if char_count < 81:
+		print "not enough data"
+		exit(1)
 	return puzzle
 
 def writeToCNFFile(puzzle, min_or_ext):
