@@ -246,11 +246,11 @@ def main():
 	solved = False
 	itCount = 0
 	while not solved:
-		print "\t\t%s\n" % str(puzzle_stack)
+	#	print "\t\t%s\n" % str(puzzle_stack)
 		itCount += 1
-		for i in range(0,9):
-			print puzzle.get_row(i)
-		print "\nStarting Iteration %d\n" % (itCount)
+	#	for i in range(0,9):
+	#		print puzzle.get_row(i)
+	#	print "\nStarting Iteration %d\n" % (itCount)
 		for i in range(0,9):
 			row_count = i
 			for j in range(0,9):
@@ -325,27 +325,24 @@ def main():
 			new_row = remove_restrictions(row, [2,3,4,5])
 			if row != new_row:
 				puzzle.set_row(i, new_row)
-				#print "\trestriction found line"
 		for i in range(0,9):
 			column = puzzle.get_column(i)
 			new_column = remove_restrictions(column, [2,3,4,5])
 			if column != new_column:
 				puzzle.set_column(i, new_column)
-				#print "\trestriction found column"
 		for i in range(0,9):
 			square = array_to_string(return_square(i, (i%3)*3, puzzle.rows))
 			new_square = remove_restrictions(square, [2,3,4,5])
 			if square != new_square:
 				puzzle.set_square(i, new_square)
-				#print "\trestriction found square"
 		
 		if not puzzle_valid(puzzle):
 			need_to_pop = True
 			while need_to_pop:
 				if puzzle_stack == []:
-					print "not a valid puzzle"
+	#				print "not a valid puzzle"
 					solved = True
-				print "not valid, backtracking\n"
+	#			print "not valid, backtracking\n"
 				popped = puzzle_stack.pop()
 				pop_args = popped[0]
 				pop_puzzle = popped[1]
@@ -374,7 +371,7 @@ def main():
 			
 			if last_puzzle == puzzle.rows:
 				changed = False
-				print "\t***adding to stack***\n"
+				#print "\t***adding to stack***\n"
 				for i in range(0,9):
 					if changed:
 						break
@@ -392,15 +389,13 @@ def main():
 								last_puzzle.append(row)
 							break
 							
-				#print "\ncant reduce any further"
-				#exit(1)
 			else:
 				last_puzzle = []
 				for row in puzzle.rows:
 					last_puzzle.append(row)
 	
-	for row in puzzle.rows:
-		print row
+	#for row in puzzle.rows:
+	#	print row
 
 if __name__ == "__main__":
 	main()
