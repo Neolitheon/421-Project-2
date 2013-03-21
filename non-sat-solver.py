@@ -367,7 +367,7 @@ def main():
 
 			if puzzle_complete(puzzle):
 				solved = True
-				print "Solved after %d iterations" % (itCount)
+	#			print "Solved after %d iterations" % (itCount)
 			
 			if last_puzzle == puzzle.rows:
 				changed = False
