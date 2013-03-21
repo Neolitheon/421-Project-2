@@ -68,7 +68,7 @@ def writeToCNFFile(puzzle, min_or_ext, filename):
 				sum += 1
 	sum += 8748
 	if ext:
-		sum += 2916
+		sum += 3240
 	f.write("p cnf 729 %d\n" % sum)
 	#Minimum
 	#VARIABLES
@@ -133,7 +133,7 @@ def writeToCNFFile(puzzle, min_or_ext, filename):
 		for x in range (1, 10):
 			for y in range (1, 10):
 				for z in range (1, 9):
-					for i in range (z, 10):
+					for i in range (z+1, 10):
 						cnf_clause = "-%d%d%d -%d%d%d 0\n" % (x,y,z,x,y,i)
 						f.write(cnf_clause)
 						
@@ -183,8 +183,6 @@ def main():
 
 	puzzle = initPuzzle(input_file)
 	printPuzzle(puzzle)
-	
-	print "%s\n" % (input_file[:input_file.index('.')])
 	writeToCNFFile(puzzle, min_or_ext, input_file[:input_file.index('.')])
 
 if __name__ == "__main__":
