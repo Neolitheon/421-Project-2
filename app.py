@@ -44,7 +44,12 @@ def initPuzzle(filename):
 			if len(numList) == 9:
 				puzzle.append(numList)
 				numList = []
+			if char_count >= 81:
+				print "Greater than 81 characters"
+				break
 		line_count += 1 
+		if char_count >= 81:
+			break
 	if char_count < 81:
 		print "not enough data"
 		exit(1)
