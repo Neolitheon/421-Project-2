@@ -2,8 +2,6 @@
 
 import sys
 
-blank = ['.', '?', '*']
-
 def readFile(filename):
 	lines = []
 	f = open(filename)
@@ -11,54 +9,28 @@ def readFile(filename):
 		lines.append(line)
 	f.close()
 	return lines
-	
-def printPuzzle(puzzle):
-	line_count = 0
-	print ""
-	for line in puzzle:
-		print "%d%d%d " % (line[0], line[1], line[2]),
-		print "%d%d%d " % (line[3], line[4], line[5]),
-		print "%d%d%d " % (line[6], line[7], line[8])
-		line_count += 1
-		if line_count % 3 == 0:
-			print ""
-			
+
 def initPuzzle(filename): 
 	lines = readFile(filename)
+	blank = ['.', '?', '*']
 	puzzle = []
 	line_count = 1
-	char_count = 0
-	numList = []
 	for line in lines:
+		numList = ''
 		for char in line:
 			char = char.strip()
 			if char == "":
 				continue
 			if char in blank:
-				char = '0'
-			try:
-				verify = int(char)
-				numList.append(verify)
-				char_count += 1
-			except:
-				print "fail"
-				exit(1)
-			if len(numList) == 9:
-				puzzle.append(numList)
-				numList = []
-			if char_count > 81:
-				print "Greater than 81 characters"
-				break
-		line_count += 1 
-		if char_count > 81:
-			break
-	if char_count < 81:
-		print "not enough data"
-		exit(1)
-	print "returning puzzle"
-	printPuzzle(puzzle)
+				char = 'x'
+			numList += char
+		if len(numList) != 9:
+			print "line %d not long enough" % (line_count)
+			exit(1)
+		puzzle.append(numList)
+		line_count += 1
 	return puzzle
-
+	
 def validate(row):
 	for element in ['1','2','3','4','5','6','7','8','9']:
 		if element not in row:
@@ -186,7 +158,7 @@ def make_full(row):
 		if 'x' == element:
 			row_string += '123456789'
 		else:
-			row_string += '%s' % (element)
+			row_string += element
 		row_string += ','
 	return row_string[:-1]
 
