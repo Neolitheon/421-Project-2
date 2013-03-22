@@ -3,17 +3,21 @@ import sys
 import timeit
 
 #global variable of filenames?
-filename = 'input.txt'
+#filename = 'input'
 
 def main():
-	NONSAT_HELPER()
-	SAT_HELPER()
+	if len(sys.argv) != 2:
+		print("Please put in the correct argument: <filename>")
+		exit(1)
+	input_file = sys.argv[1]
+	NONSAT_HELPER(input_file)
+	#SAT_HELPER(input_file)
 
-def NONSAT_HELPER():
-	arg = 'NONSAT_RUN(\'%s\')' % filename
+def NONSAT_HELPER(filename):
+	arg = 'NONSAT_RUN(\'%s\')' % (filename)
 	t = timeit.Timer(arg, 'from __main__ import NONSAT_RUN')
 	times = []
-	iterations = 20
+	iterations = 1
 	for i in range(0, iterations):
 		elapsed = (1000000 * t.timeit(number=1))
 		times.append(elapsed)
@@ -22,15 +26,13 @@ def NONSAT_HELPER():
 	
 
 def NONSAT_RUN(filename):
-	command = 'python non-sat-solver.py %s' % filename
+	command = 'python non-sat-solver.py %s' % (filename)
 	os.system(command)
 
-def SAT_HELPER():
-	command = 'python app.py %s min' % filename
+def SAT_HELPER(input_file):
+	command = 'python app.py %s min' % (input_file)
 	os.system(command) 
-
-	output = 'output.cnf'
-	arg = 'SAT_RUN(\'%s\')' % output
+	arg = 'SAT_RUN(\'%s\')' % (input_file[:input_file.index('.')] + ".cnf")
 	t = timeit.Timer(arg, 'from __main__ import SAT_RUN')
 	times = []
 	iterations = 20
