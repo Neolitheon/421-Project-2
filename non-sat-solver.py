@@ -15,6 +15,7 @@ def initPuzzle(filename):
 	blank = ['.', '?', '*']
 	puzzle = []
 	line_count = 1
+	char_count = 0
 	for line in lines:
 		numList = ''
 		for char in line:
@@ -24,11 +25,19 @@ def initPuzzle(filename):
 			if char in blank:
 				char = 'x'
 			numList += char
-		if len(numList) != 9:
-			print "line %d not long enough" % (line_count)
-			exit(1)
-		puzzle.append(numList)
+			char_count += 1
+			if len(numList) == 9:
+				puzzle.append(numList)
+				numList = ''
+			if char_count > 81:
+				print "Greater than 81 characters"
+				break
 		line_count += 1
+		if char_count > 81:
+			break
+	if char_count < 81:
+		print "not enough data"
+		exit(1)
 	return puzzle
 	
 def validate(row):
@@ -367,7 +376,7 @@ def main():
 
 			if puzzle_complete(puzzle):
 				solved = True
-	#			print "Solved after %d iterations" % (itCount)
+				print "Solved after %d iterations" % (itCount)
 			
 			if last_puzzle == puzzle.rows:
 				changed = False
@@ -394,8 +403,8 @@ def main():
 				for row in puzzle.rows:
 					last_puzzle.append(row)
 	
-	#for row in puzzle.rows:
-	#	print row
+	for row in puzzle.rows:
+		print row
 
 if __name__ == "__main__":
 	main()
