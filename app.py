@@ -69,7 +69,7 @@ def writeToCNFFile(puzzle, min_or_ext, filename):
 	sum += 8829
 	if ext:
 		sum += 3159
-	f.write("p cnf 729 %d\n" % sum)
+	f.write("p cnf 999 %d\n" % sum)
 	#Minimum
 	#VARIABLES
 	for x in range (1,10):
